@@ -1,0 +1,265 @@
+
+.background-fixed {
+  height: 200vh; /* Ca să avem scroll */
+  background-image: url("/resurse/imagini/fundal1.jpg");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  animation: schimbareFundal 10s infinite alternate;
+}
+
+/* Efect de schimbare a fundalului */
+@keyframes schimbareFundal {
+  0% {
+    background-image: url("/resurse/imagini/fundal1.jpg");
+  }
+  50% {
+    background-image: url("/resurse/imagini/fundal2.jpg");
+  }
+  100% {
+    background-image: url("/resurse/imagini/fundal1.jpg");
+  }
+}
+
+.content {
+  color: white;
+  padding: 100px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+
+
+.reflexie-text {
+    position: relative;
+    display: inline-block;
+    font-size: 2rem;
+    font-weight: bold;
+    color: #569FE5;
+    text-align: center;
+    margin: 2rem auto 2rem;
+    line-height: 1.1;
+    padding: 0;
+    z-index: 1;
+    font-family: serif;
+    display: inline-flex;
+    align-items: flex-start;
+    cursor: pointer; /* Indicate it's clickable */
+}
+/*varianta corecta */
+.reflexie-text::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 100%;            /* Position directly under the text */
+    left: 0;
+    width: 100%;
+    height: 120%;
+    font-size: 2rem;
+    color: var(--maro-inchis);
+    transform: scaleY(-0.6) skewX(-15deg);
+    opacity: 0.6;
+    pointer-events: none;
+    z-index: -1;
+    filter: blur(0.3px);
+    mask-image:
+        linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.5) 70%, transparent 100%),
+        repeating-radial-gradient(
+            ellipse at 50% 100%,
+            rgba(0,0,0,1) 0px,
+            rgba(0,0,0,1) 15px,
+            transparent 20px,
+            transparent 25px
+        );
+    -webkit-mask-image:
+        linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.5) 70%, transparent 100%),
+        repeating-radial-gradient(
+            ellipse at 50% 100%,
+            rgba(0,0,0,1) 0px,
+            rgba(0,0,0,1) 15px,
+            transparent 20px,
+            transparent 25px
+        );
+    mask-composite: intersect;
+    -webkit-mask-composite: source-in;
+    margin-top: -2px;
+    padding-top: 0;
+    vertical-align: top;
+    animation:  ellipse-waves 1s linear infinite paused;
+   
+    /* Start with animation paused */
+    transition: all 0.2s ease;
+}
+
+/* Activate animation on click using a class */
+.reflexie-text:hover::after {
+    animation-play-state: running;
+}
+
+/* Animation for ellipsoidal waves */
+@keyframes ellipse-waves {
+    0% {
+        mask-position: 0 0, 0 0;
+        -webkit-mask-position: 0 0, 0 0;
+    }
+    100% {
+        mask-position: 0 0, 0 24px;
+        -webkit-mask-position: 0 0, 0 24px;
+    }
+}
+
+
+.text-centrat {
+    text-align: center;
+    width: 100%;
+    display: block;
+}
+
+@media (max-width: 1792px) {
+  * {
+    font-size: small;
+  }
+}
+.scroll-container {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    background-color: #56c7e6;/* Puteți modifica culoarea de fundal */
+    color: #3A5BB4; /* Puteți modifica culoarea textului */
+    padding: 15px 0;
+}
+
+/* Textul cu defilare orizontală */
+.scrolling-text {
+    white-space: nowrap;
+    animation: scrollText 15s linear infinite; /* Durata de 15s poate fi modificată */
+    display: inline-block;
+    padding-left: 100%; /* Începe din afara containerului (din dreapta) */
+}
+
+/* Animația pentru defilarea textului */
+@keyframes scrollText {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
+}
+nav {
+  background: #527EE6;
+  color: #fff;
+  padding: 10px 0;
+}
+nav .burger {
+  display: none;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 10px 20px;
+}
+@media (max-width: 1000px) {
+  nav .burger {
+    display: block;
+  }
+}
+nav ul.meniu {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+}
+@media (max-width: 1000px) {
+  nav ul.meniu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    opacity: 0;
+    transform: rotateZ(-90deg);
+    transform-origin: top;
+    transition: opacity 0.4s, transform 0.4s ease;
+    pointer-events: none;
+  }
+  nav ul.meniu.active {
+    opacity: 1;
+    transform: rotateZ(0deg);
+    pointer-events: auto;
+  }
+}
+nav ul.meniu li {
+  position: relative;
+}
+nav ul.meniu li a {
+  display: block;
+  padding: 10px 20px;
+  color: inherit;
+  text-decoration: none;
+}
+@media (max-width: 1000px) {
+  nav ul.meniu li a {
+    background: transparent;
+    transition: background 0.4s, color 0.4s;
+  }
+  nav ul.meniu li a:hover {
+    background: #fff;
+    color: #527EE6;
+  }
+  nav ul.meniu li a::after {
+    display: none !important;
+  }
+}
+@media (min-width: 1792px) {
+  nav ul.meniu li.has-submenu > a, nav ul.meniu li.no-submenu > a {
+    position: relative;
+  }
+  nav ul.meniu li.has-submenu > a::after, nav ul.meniu li.no-submenu > a::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 3px;
+    background: linear-gradient(to right, #527EE6, #58C8E6);
+    transition: all 0.4s ease-in-out;
+    transform: translateX(-50%);
+  }
+  nav ul.meniu li.has-submenu > a:hover::after, nav ul.meniu li.no-submenu > a:hover::after {
+    width: 100%;
+  }
+}
+nav ul.meniu li.has-submenu ul.submenu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #527EE6;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: none;
+  width: 150px;
+}
+nav ul.meniu li.has-submenu ul.submenu li a {
+  display: block;
+  padding: 10px 20px;
+  color: #fff;
+  text-decoration: none;
+}
+nav ul.meniu li.has-submenu ul.submenu li a::after {
+  display: none !important;
+}
+nav ul.meniu li.has-submenu ul.submenu li a:hover {
+  background: #fff;
+  color: #527EE6;
+}
+nav ul.meniu li.has-submenu:hover > ul.submenu {
+  display: block;
+}
+@media (max-width: 1700px) {
+  nav ul.meniu li .fas.fa-home:before {
+    content: "\e1b0";
+    font-size: small;
+  }
+}
+@media (max-width: 1000px) {
+  nav ul.meniu li a {
+    font-size: small;
+  }
+}

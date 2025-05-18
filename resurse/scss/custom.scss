@@ -1,0 +1,180 @@
+// === VARIABILE TEMA LIGHT ===
+$primary: purple;
+$secondary: #43a047;
+$success: #00bfae;
+$info: #2979ff;
+$warning: #ffd600;
+$danger: #d50000;
+$light: #f8f9fa;
+$dark: #212121;
+
+$body-bg: purple;
+$body-color: #222;
+$link-color: #e53935;
+
+$font-family-base: 'Montserrat', Arial, sans-serif;
+$font-size-base: 1.1rem;
+
+$border-radius: 1.2rem;
+$border-radius-lg: 2rem;
+$border-radius-sm: 0.5rem;
+
+$h1-font-size: 2.8rem;
+$h2-font-size: 2.2rem;
+$h3-font-size: 1.7rem;
+$h4-font-size: 1.3rem;
+$h5-font-size: 1.1rem;
+$h6-font-size: 0.95rem;
+
+$grid-breakpoints: (
+  sm: 0,
+  md: 850px,
+  lg: 1200px,
+  xl: 1400px
+);
+
+$container-max-widths: (
+  md: 800px,
+  lg: 1100px,
+  xl: 1320px
+);
+
+$box-shadow: 0 0.5rem 1rem rgba(229, 57, 53, 0.15);
+
+// === IMPORT BOOTSTRAP CU VARIABILELE CUSTOMIZATE (TEMA LIGHT) ===
+@use '../../node_modules/bootstrap/scss/bootstrap' with (
+  $primary: $primary,
+  $secondary: $secondary,
+  $success: $success,
+  $info: $info,
+  $warning: $warning,
+  $danger: $danger,
+  $light: $light,
+  $dark: $dark,
+  $body-bg: $body-bg,
+  $body-color: $body-color,
+  $link-color: $link-color,
+  $font-family-base: $font-family-base,
+  $font-size-base: $font-size-base,
+  $border-radius: $border-radius,
+  $border-radius-lg: $border-radius-lg,
+  $border-radius-sm: $border-radius-sm,
+  $h1-font-size: $h1-font-size,
+  $h2-font-size: $h2-font-size,
+  $h3-font-size: $h3-font-size,
+  $h4-font-size: $h4-font-size,
+  $h5-font-size: $h5-font-size,
+  $h6-font-size: $h6-font-size,
+  $grid-breakpoints: $grid-breakpoints,
+  $container-max-widths: $container-max-widths,
+  $box-shadow: $box-shadow
+);
+
+// === STILURI CUSTOM TEMA LIGHT ===
+.tema-light {
+  background-color: $body-bg !important;
+  color: $body-color !important;
+
+  a {
+    color: $link-color !important;
+  }
+
+  button, input, select, textarea {
+    border-radius: $border-radius !important;
+    font-family: $font-family-base !important;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    box-shadow: $box-shadow;
+  }
+
+  h1 { font-size: $h1-font-size !important; }
+  h2 { font-size: $h2-font-size !important; }
+  h3 { font-size: $h3-font-size !important; }
+  h4 { font-size: $h4-font-size !important; }
+  h5 { font-size: $h5-font-size !important; }
+  h6 { font-size: $h6-font-size !important; }
+}
+
+// === VARIABILE CUSTOM TEMA DARK ===
+$dark-primary: #6a1b9a;
+$dark-secondary: #4527a0;
+$dark-success: #2e7d32;
+$dark-info: #0288d1;
+$dark-warning: #fbc02d;
+$dark-danger: #c62828;
+$dark-light: #424242;
+$dark-dark: #000000;
+
+$dark-body-bg: #3e1857;
+$dark-body-color: #683870;
+$dark-link-color: #b01dca;
+
+$dark-font-family-base: 'Roboto Slab', Georgia, serif;
+$dark-font-size-base: 1.05rem;
+
+$dark-border-radius: 1rem;
+$dark-border-radius-lg: 1.6rem;
+$dark-border-radius-sm: 0.4rem;
+
+$dark-h1-font-size: 2rem;
+$dark-h2-font-size: 1rem;
+$dark-h3-font-size: 1rem;
+$dark-h4-font-size: 1rem;
+$dark-h5-font-size: 1rem;
+$dark-h6-font-size: 1rem;
+
+$dark-box-shadow: 0 0.5rem 1.2rem rgba(255, 255, 255, 0.08);
+
+$dark-grid-breakpoints: (
+  sm: 0,
+  md: 870px,
+  lg: 1250px,
+  xl: 1440px
+);
+
+$dark-container-max-widths: (
+  md: 820px,
+  lg: 1150px,
+  xl: 1380px
+);
+
+// === STILURI CUSTOM TEMA DARK ===
+.tema-dark {
+  background-color: $dark-body-bg !important;
+  color: $dark-body-color !important;
+
+  a {
+    color: $dark-link-color !important;
+  }
+
+  button, input, select, textarea {
+    border-radius: $dark-border-radius !important;
+    font-family: $dark-font-family-base !important;
+    font-size: $dark-font-size-base !important;
+    box-shadow: $dark-box-shadow;
+    background-color: $dark-primary;
+    color: #fff !important;
+    border: none;
+  }
+
+  h1 { font-size: $dark-h1-font-size !important; color: $dark-link-color !important; }
+  h2 { font-size: $dark-h2-font-size !important; color: $dark-link-color !important; }
+  h3 { font-size: $dark-h3-font-size !important; color: $dark-link-color !important; }
+  h4 { font-size: $dark-h4-font-size !important; color: $dark-link-color !important; }
+  h5 { font-size: $dark-h5-font-size !important; color: $dark-link-color !important; }
+  h6 { font-size: $dark-h6-font-size !important; color: $dark-link-color !important; }
+}
+
+// === BREAKPOINTS SPECIFICE DARK (doar la nevoie) ===
+@media (min-width: map-get($dark-grid-breakpoints, md)) {
+  .tema-dark {
+    font-size: 1.1rem;
+  }
+}
+
+@media (min-width: map-get($dark-grid-breakpoints, lg)) {
+  .tema-dark {
+    font-size: 1.2rem;
+  }
+}

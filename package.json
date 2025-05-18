@@ -1,0 +1,24 @@
+{
+  "name": "proiect_web",
+  "version": "1.0.0",
+  "description": "Vacante de vis",
+  "main": "index2.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "plaje",
+    "exotic",
+    "tropical"
+  ],
+  "author": "Onofreiciuc Ioana Alexandra",
+  "license": "ISC",
+  "dependencies": {
+    "bootstrap": "^5.3.6",
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "path-to-regexp": "^8.2.0",
+    "sass": "^1.89.0",
+    "sharp": "^0.34.1"
+  }
+}

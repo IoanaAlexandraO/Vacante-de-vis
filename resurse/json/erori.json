@@ -1,0 +1,45 @@
+{
+    "cale_baza": "/resurse/imagini/erori",
+    "eroare_default": {
+        "titlu": "Eroare",
+        "text": "A apărut o eroare neașteptată. Încercați mai târziu.",
+        "imagine": "eroare.png"
+    },
+    "info_erori": [
+        {
+            "identificator": 403,
+            "status": true,
+            "titlu": "Acces interzis",
+            "text": "Nu aveți permisiunea de a accesa această resursă.",
+            "imagine": "eroare.png"
+        },
+        {
+            "identificator": 404,
+            "status": true,
+            "titlu": "404-Pagină inexistentă",
+            "text": "Ne pare rău, pagina căutată nu a fost găsită.",
+            "imagine": "eroare.png"
+        },
+        {
+            "identificator": 400,
+            "status": true,
+            "titlu": "400 - Cerere Invalida",
+            "text": "Cererea trimisa catre server este invalida.",
+            "imagine": "eroare.png"
+        },
+        {
+            "identificator": 1,
+            "status": false,
+            "titlu": "Site In Dezvoltare",
+            "text": "Site-ul este momentan In lucru. Reveniti curand!",
+            "imagine": "eroare.png"
+        },
+        {
+            "identificator": 2,
+            "status": false,
+            "titlu": "Eroare Baza de Date",
+            "text": "Problema temporara cu baza de date. Va rugam reveniti mai tarziu.",
+            "imagine": "eroare.png"
+        }
+    ]
+}

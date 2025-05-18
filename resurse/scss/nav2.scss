@@ -1,0 +1,170 @@
+// Variabile SASS
+$spacing-xs: 5px;
+$spacing-sm: 10px;
+$spacing-md: 20px;
+$spacing-lg: 40px;
+$transition-speed: 0.4s;
+$accent-blue: #527EE6;
+$menu-bg: #527EE6;
+$menu-text: #fff;
+$submenu-bg: #527EE6;
+$submenu-text: #fff;
+$submenu-bg-hover: #fff;
+$submenu-text-hover: #527EE6;
+$gradient-color-start: #527EE6;
+$gradient-color-end: #58C8E6;
+
+
+// Mixin pentru underline gradient animat (doar desktop)
+@mixin gradient-underline {
+    position: relative;
+
+    &::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        width: 0;
+        height: 3px;
+        background: linear-gradient(to right, $gradient-color-start, $gradient-color-end);
+        transition: all $transition-speed ease-in-out;
+        transform: translateX(-50%);
+    }
+
+    &:hover::after {
+        width: 100%;
+    }
+}
+
+* {
+    @media (max-width: 1792px) {
+        font-size: small;
+    }
+}
+
+nav {
+    background: $menu-bg;
+    color: $menu-text;
+    padding: $spacing-sm 0;
+
+    .burger {
+        display: none;
+        font-size: 24px;
+        cursor: pointer;
+        padding: $spacing-sm $spacing-md;
+
+        @media (max-width: 1000px) {
+            display: block;
+        }
+    }
+
+    ul.meniu {
+        list-style: none;
+        display: flex;
+        justify-content: center;
+        margin: 0;
+        padding: 0;
+
+        @media (max-width: 1000px) {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            opacity: 0;
+            transform: rotateZ(-90deg);
+            transform-origin: top;
+            transition: opacity $transition-speed, transform $transition-speed ease;
+            pointer-events: none; // Prevent interaction when hidden
+
+            &.active {
+
+                opacity: 1;
+                transform: rotateZ(0deg);
+                pointer-events: auto; // Allow interaction when active
+            }
+        }
+
+        li {
+            position: relative;
+
+            a {
+                display: block;
+                padding: $spacing-sm $spacing-md;
+                color: inherit;
+                text-decoration: none;
+
+                @media (max-width: 1000px) {
+                    background: transparent;
+                    transition: background $transition-speed, color $transition-speed;
+
+                    &:hover {
+                        background: $submenu-bg-hover;
+                        color: $submenu-text-hover;
+                    }
+
+                    &::after {
+                        display: none !important; // eliminăm bara glisantă pe mobil
+                    }
+                }
+            }
+
+            // Aplicăm underline doar pe desktop
+            @media (min-width: 1792px) {
+
+                &.has-submenu>a,
+                &.no-submenu>a {
+                    @include gradient-underline;
+                }
+            }
+
+            &.has-submenu {
+                ul.submenu {
+                    position: absolute;
+                    top: 100%;
+                    left: 0;
+                    background: $submenu-bg;
+                    list-style: none;
+                    padding: 0;
+                    margin: 0;
+                    display: none;
+                    width: 150px;
+
+                    li {
+                        a {
+                            display: block;
+                            padding: $spacing-sm $spacing-md;
+                            color: $submenu-text;
+                            text-decoration: none;
+
+                            &::after {
+                                display: none !important;
+                            }
+
+                            &:hover {
+                                background: $submenu-bg-hover;
+                                color: $submenu-text-hover;
+                            }
+                        }
+                    }
+                }
+
+                &:hover>ul.submenu {
+                    display: block;
+                }
+            }
+
+
+            .fas.fa-home:before {
+                @media (max-width: 1700px) {
+                    content: "\e1b0";
+                    font-size: small; // Setează dimensiunea fontului la "medium" pe ecrane mari
+                }
+            }
+
+            a {
+                @media (max-width: 1000px) {
+                    font-size: small; // Setează dimensiunea fontului la "medium" pe ecrane mari
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,70 @@
+{
+    "cale_galerie": "resurse/imagini/galerie",
+    "imagini": [
+      {
+        "cale_relativa": "image1.jpg",
+        "nume": "Plaja",
+        "descriere": "Plaja cu nisip fin și ape turcoaz",
+        "sfert_ora":"3",
+        "atribuire":{
+          "nume": "Giuseppe Milo",
+          "link": "https://openverse.org/image/collection?source=flickr&creator=Giuseppe+Milo+(www.pixael.com)",
+          "licenta": "CC-BY"
+        }
+      },
+      {
+        "cale_relativa": "image2.jpg",
+        "nume": "Surfkit",
+        "descriere": "Un om care face surf ",
+        "sfert_ora":"4"
+      },
+      {
+        "cale_relativa": "image3.jpg",
+        "nume": "Insula",
+        "descriere": "Insula in forma de inima din Maldives",
+        "sfert_ora":"5"
+      },
+      {
+        "cale_relativa": "image4.jpg",
+        "nume": "Bautura racoritoare",
+        "descriere": "Bautura racoritoare in nuca de cocos pe plaja",
+        "sfert_ora":"3"
+      },
+      {
+        "cale_relativa": "image5.jpg",
+        "nume": "Hamac ",
+        "descriere": "Hamac pe plaja cu vedere la ocean",
+        "sfert_ora":"2"
+      },
+      {
+        "cale_relativa": "image6.jpg",
+        "nume": "Leagan ",
+        "descriere": "Leagan pe plaja cu vedere la ocean",
+        "sfert_ora":"1"
+      },
+      {
+        "cale_relativa": "image7.jpg",
+        "nume": "Om cu barca",
+        "descriere": "Om care pescuieste cu barca",
+        "sfert_ora":"1"
+      },
+      {
+        "cale_relativa": "image8.jpg",
+        "nume": "Resort hotelier",
+        "descriere": "Resort hotelier pe apa cu tobogan",
+        "sfert_ora":"2"
+      }   ,
+      {
+        "cale_relativa": "image9.jpg",
+        "nume": "Palmieri",
+        "descriere": "Plaja cu palmieri si ponton",
+        "sfert_ora":"3"
+      },
+      {
+        "cale_relativa": "image10.jpg",
+        "nume": "Sezlon",
+        "descriere": "Sezlong pe plaja",
+        "sfert_ora":"5"
+      }
+    ]
+  }

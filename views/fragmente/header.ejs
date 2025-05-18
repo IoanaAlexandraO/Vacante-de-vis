@@ -1,0 +1,39 @@
+ <header>
+    <h1>Vacante de vis</h1>
+
+    <nav>
+    <div class="burger" onclick="document.querySelector('ul.meniu').classList.toggle('active')">
+      <i class="fas fa-bars"></i>
+    </div>
+
+    <ul class="meniu">
+      <li class="no-submenu"><a href="#"><i class="fas fa-home"></i> Acasă</a></li>
+      <li class="no-submenu"><a href="#"><i class="fas fa-info-circle"></i> Despre Noi</a></li>
+
+      <!-- Submeniu cu linkuri către alte pagini -->
+      <li class="has-submenu">
+        <a href="#"><i class="fas fa-concierge-bell"></i> Servicii</a>
+        <ul class="submenu">
+          <li><a href="cazare.html"><i class="fas fa-bed"></i> Cazare</a></li>
+          <li><a href="transport.html"><i class="fas fa-bus"></i> Transport</a></li>
+          <li><a href="excursii.html"><i class="fas fa-map-marked-alt"></i> Excursii</a></li>
+        </ul>
+      </li>
+
+      <!-- Submeniu cu linkuri către secțiuni dintr-o pagină -->
+      <li class="has-submenu">
+        <a href="#"><i class="fas fa-globe"></i> Pagina Principală</a>
+        <ul class="submenu">
+          <li><a href="#zona1"><i class="fas fa-info"></i> Prezentare</a></li>
+          <li><a href="#zona2"><i class="fas fa-tags"></i> Oferte Speciale</a></li>
+          <li><a href="#zona3"><i class="fas fa-calendar-alt"></i> Calendar Evenimente</a></li>
+          <li><a href="#zona4"><i class="fas fa-bullhorn"></i> Anunțuri Importante</a></li>
+          <li><a href="#zona5"><i class="fas fa-users"></i> Clienți Fideli</a></li>
+          <li><a href="#zona6"><i class="fas fa-chart-bar"></i> Statistici Vacanțe</a></li>
+          <li><a href="#zona7"><i class="fas fa-map"></i> Descoperă Destinațiile</a></li>
+          <li><a href="#zona8"><i class="fas fa-water"></i> Lumea Subacvatică</a></li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+  </header>

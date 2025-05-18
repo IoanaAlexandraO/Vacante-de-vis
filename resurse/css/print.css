@@ -1,0 +1,78 @@
+/* Ascundem meniul */
+nav {
+  display: none;
+}
+
+/* Bannerul afișat în susul primei pagini */
+header {
+  display: block;
+  width: 80%;
+  margin: 0 auto;
+  border: 2px dotted black;
+  text-align: center;
+}
+
+/* Ascundem elementele media și linkul către începutul paginii */
+img, video, iframe, #link-top-container {
+  display: none;
+}
+
+/* Gridul paginii afișat ca block */
+#grid-pagina {
+  display: block;
+}
+
+/* Linkurile afișate ca text normal */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Headingul de nivel 1 */
+h1 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-size: 2.5em;
+  text-decoration: underline;
+  height: 100vh; /* Centrare verticală */
+  margin: 0;
+}
+
+/* Page break după heading */
+h1::after {
+  content: '';
+  display: block;
+  page-break-after: always;
+}
+
+/* Page break înainte de footer */
+footer {
+  page-break-before: always;
+}
+
+/* Watermark */
+body::before {
+  content: "Onofreiciuc Alexandra";
+  position: fixed;
+  width: 100px;
+  height: 2cm;
+  border: 3px double black;
+  opacity: 0.65;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  /* z-index: -1; Asigurăm că watermark-ul nu acoperă conținutul */
+}
+
+/* Margini pentru paginile din stânga și dreapta */
+@page:left {
+  margin-left: 2.5cm;
+  margin-right: 0.5cm;
+}
+
+@page:right {
+  margin-left: 0.5cm;
+  margin-right: 2.5cm;
+}

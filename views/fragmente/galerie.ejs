@@ -1,0 +1,10 @@
+<div class="galerie-container">
+  <h2>Galerie Maldive</h2>
+  <div class="galerie-grid">
+        <% for (let i = 0; i < images.length && i < 10; i++) { %>
+            <% if (images.length > i) { %>
+                    <%- include("../fragmente/galerie-item", { img: images[i] }) %>
+            <% } %>
+        <% } %>
+
+  </div>

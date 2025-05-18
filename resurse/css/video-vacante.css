@@ -1,0 +1,62 @@
+/* Stilizarea containerului video - cu dimensiuni mai potrivite */
+.video-container {
+    width: 100%;
+    max-width: 600px; /* Redus de la 800px */
+    margin: 2rem auto;
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    background-color: #f9f9f9;
+    padding: 10px;
+}
+
+/* Stilizarea elementului video - dimensiuni mai mici */
+video {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    display: block;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    height: auto; /* Permite redimensionarea proporțională */
+}
+
+/* Stilizarea textului din subtitrări - îmbunătățit pentru vizibilitate */
+::cue {
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1em; /* Mărime redusă */
+    line-height: 1.4;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+/* Poziționarea subtitrărilor */
+::cue(:bottom) {
+    bottom: 8%;
+}
+
+/* Stilizare pentru textul bold din subtitrări */
+::cue(b) {
+    font-weight: bold;
+    color: #ffcc00; /* Culoare accentuată pentru textul bolduit */
+}
+
+/* Adăugare hover effect pentru controlul video */
+video:hover {
+    cursor: pointer;
+}
+
+/* Adăugare stil pentru controale video */
+video::-webkit-media-controls {
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 8px;
+    padding: 2px;
+}
+
+/* Controlul subtitrarilor să fie mai vizibil */
+video::-webkit-media-controls-toggle-closed-captions-button {
+    display: flex;
+}

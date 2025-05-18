@@ -1,0 +1,135 @@
+// Variabile SASS
+$spacing-xs: 5px;
+$spacing-sm: 10px;
+$spacing-md: 20px;
+$spacing-lg: 40px;
+$transition-speed: 0.4s;
+$primary-blue: #527EE6;
+$menu-bg: #527EE6;
+$menu-text: #fff;
+$submenu-bg: #527EE6;
+$submenu-text: #fff;
+$submenu-bg-hover: #fff;
+$submenu-text-hover: #527EE6;
+$gradient-color-start: #527EE6;
+$gradient-color-end: #58C8E6;
+
+// Mixin pentru underline gradient animat (doar pentru meniul principal)
+@mixin gradient-underline {
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 3px;
+    background: linear-gradient(to right, $gradient-color-start, $gradient-color-end);
+    transition: all $transition-speed ease-in-out;
+    transform: translateX(-50%);
+  }
+
+  &:hover::after {
+    width: 100%;
+  }
+}
+
+* {
+  @media (max-width: 1792px) {
+    font-size: small; // Setează dimensiunea fontului la "medium" pe ecrane mari
+  }
+}
+
+
+nav {
+  background: $menu-bg;
+  color: $menu-text;
+  padding: $spacing-sm 0;
+
+
+  ul.meniu {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+
+    li {
+      position: relative;
+
+      a {
+        display: block;
+        padding: $spacing-sm $spacing-md;
+        color: inherit;
+        text-decoration: none;
+      }
+
+      // Aplicăm doar pe meniul principal
+      @media (min-width: 1792px) {
+        &.has-submenu>a,
+        &.no-submenu>a // class="has-submenu"
+
+        //,&.has-submenu>a 
+          {
+          @include gradient-underline;
+        }
+      }
+
+      &.has-submenu {
+        ul.submenu {
+          position: absolute;
+          top: 100%;
+          left: 0;
+          background: $submenu-bg;
+          list-style: none;
+          padding: 0;
+          margin: 0;
+          display: none;
+          width: 150px;
+
+          li {
+            a {
+              display: block;
+              padding: $spacing-sm $spacing-md;
+              color: $submenu-text;
+              text-decoration: none;
+              // NU mai adăugăm mixin-ul aici!
+            }
+          }
+        }
+
+        &:hover>ul.submenu {
+          display: block;
+
+          li a {
+            &:hover {
+              background: $submenu-bg-hover;
+              color: $submenu-text-hover;
+            }
+          }
+        }
+
+
+      }
+
+      .fas.fa-home:before {
+        @media (max-width: 1000px) {
+          content: "\e1b0";
+          font-size: small; // Setează dimensiunea fontului la "medium" pe ecrane mari
+        }
+      }
+
+      a {
+        @media (max-width: 1000px) {
+          font-size: small; // Setează dimensiunea fontului la "medium" pe ecrane mari
+        }
+      }
+
+
+
+    }
+  }
+
+
+}

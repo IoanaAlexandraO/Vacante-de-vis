@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ro">
+    <head>
+        <%- include("../fragmente/head.ejs") %>
+        <link rel="stylesheet" type="text/css" href="/resurse/css/eroare.css">
+         <link rel="stylesheet" type="text/css" href="/resurse/css/general.css">
+    <link rel="stylesheet" type="text/css" href="/resurse/css/nav.css">
+    </head>
+    <body>
+        <%- include("../fragmente/header.ejs") %>
+
+        <main>
+            <div id="err-coloane">
+                <div id="err-imag">
+                    <img src="<%= imagine %>" alt="Imagine Eroare">
+                </div>
+                <section>
+                    <h2><%= titlu %></h2>
+                    <p><%= text %></p>
+                    <a href="/">Inapoi la Pagina Principala</a>
+                </section>
+            </div>
+        </main>
+        
+        <%- include("../fragmente/footer.ejs") %>
+    </body>
+</html>

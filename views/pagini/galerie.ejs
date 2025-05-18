@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <%- include("../fragmente/head") %>
+    <link rel="stylesheet" href="/resurse/css/galerie.css">
+    <title>Gusturi & Culturi - Galerie Culinară</title>
+</head>
+<body>
+    <%- include("../fragmente/header") %>
+    
+    <main>
+        <section>
+            
+            <p>Bine ai venit în paradisul insulelor Maldive, unde fiecare imagine îți aduce aminte de ape turcoaz și plaje cu nisip fin.</p>
+            <p>Descoperă rafinamentul și misterul acestor destinații exotice, iar imaginile se vor schimba odată cu briza mării.</p>
+            
+            <% 
+            
+            // Folosește variabila "imagini" trimisă din controller
+            var images = (typeof imagini !== 'undefined') ? imagini : []; 
+            var galeriePath = (typeof galeriePath !== 'undefined') ? galeriePath : ""; 
+            var path = (typeof path !== 'undefined') ? path : "";
+            %>
+            <!-- Include gallery fragment -->
+            <%- include("../fragmente/galerie", {images: images, galeriePath: galeriePath, path: path}) %>
+        </section>
+    </main>
+    
+    <%- include("../fragmente/footer") %>
+</body>
+</html>
