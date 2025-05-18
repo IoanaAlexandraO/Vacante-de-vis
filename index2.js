@@ -21,6 +21,10 @@ globalThis.obGlobal = {
 app.get("/fundal", function(req, res) {
   res.render("pagini/fundal");
 });
+
+app.get("/despre", function(req, res) {
+  res.render("pagini/despre");
+});
 app.get("/pagina_galerie", function (req, res) {
   console.log("Rendering pagina_galerie using obGlobal.obImagini:", obGlobal.obImagini);
   res.render("pagini/galerie", {
