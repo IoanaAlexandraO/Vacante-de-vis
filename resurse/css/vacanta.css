@@ -1,0 +1,75 @@
+/* vacanta.css */
+#pagina-vacanta {
+  max-width: 900px;
+  margin: auto;
+  padding: 2rem;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+#pagina-vacanta h1 {
+  text-align: center;
+  color: var(--primary-blue);
+  margin-bottom: 1rem;
+}
+
+#pagina-vacanta img {
+  width: 100%;
+  border-radius: 1rem;
+  box-shadow: 0 0 12px var(--shadow-color);
+  margin-bottom: 1rem;
+}
+
+.imagine-vacanta {
+  width: 100%;
+  max-width: 500px; /* sau cât dorești */
+  height: 300px;
+  object-fit: cover;
+  border-radius: 1rem;
+  box-shadow: 0 0 12px var(--shadow-color);
+  margin-bottom: 1rem;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.vacanta-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  background-color: var(--light-gray);
+  padding: 1rem 1.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 0 6px var(--shadow-color);
+}
+
+.vacanta-info li {
+  list-style: none;
+  padding: 0.2rem 0;
+}
+
+.vacanta-info strong {
+  color: var(--dark-blue);
+}
+
+.vacanta-descriere {
+  margin-top: 1rem;
+  line-height: 1.6;
+}
+
+#btn-rezerva {
+  margin-top: 1.5rem;
+  display: block;
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1.1rem;
+  background-color: var(--highlight-blue);
+  color: white;
+  border: none;
+  border-radius: 0.7rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+#btn-rezerva:hover {
+  background-color: var(--hover-blue);
+}

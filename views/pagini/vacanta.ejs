@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <%- include("../fragmente/head") %>
+  <link rel="stylesheet" href="/resurse/css/vacanta.css">
+</head>
+<body>
+  <%- include("../fragmente/header") %>
+
+  <main class="pagina-vacanta">
+    <h1><%= vac.nume %></h1>
+
+    <section class="detalii-vacanta">
+     <img src="/resurse/imagini/vacante/<%= vac.imagine %>" alt="<%= vac.nume %>" class="imagine-vacanta">
+
+
+      <div class="info-vacanta">
+        <p><strong>Descriere:</strong> <%= vac.descriere %></p>
+        <ul>
+          <li><strong>Categorie:</strong> <%= vac.categorie %></li>
+          <li><strong>Dificultate:</strong> <%= vac.dificultate %></li>
+          <li><strong>Durată:</strong> <%= vac.durata_zile %> zile</li>
+          <li><strong>Preț:</strong> <%= vac.pret %> €</li>
+          <li><strong>Disponibilă din:</strong> <%= vac.data_disponibilitate.toLocaleDateString("ro-RO") %></li>
+          <li><strong>Transport inclus:</strong> <%= vac.transport_inclus ? "Da" : "Nu" %></li>
+          <li><strong>Pașaport necesar:</strong> <%= vac.pasaport_necesar || 'Nespecificat' %></li>
+          <li><strong>Activități:</strong> <%= vac.activitati %></li>
+        </ul>
+        <button class="btn btn-primary">Rezervă acum</button>
+      </div>
+    </section>
+  </main>
+
+  <%- include("../fragmente/footer") %>
+</body>
+</html>

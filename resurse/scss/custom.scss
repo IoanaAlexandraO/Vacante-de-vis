@@ -1,4 +1,14 @@
+// =====================
+// === VARIABILE GLOBALE ===
+// =====================
+$transition-base: all 0.3s ease-in-out;
+$primary-blue: #527EE6;
+$light-blue: #B1E0EA;
+$accent-blue: #51A0D5;
+
+// =====================
 // === VARIABILE TEMA LIGHT ===
+// =====================
 $primary: purple;
 $secondary: #43a047;
 $success: #00bfae;
@@ -8,8 +18,8 @@ $danger: #d50000;
 $light: #f8f9fa;
 $dark: #212121;
 
-$body-bg: purple;
-$body-color: #222;
+$body-bg: #f8f9fa;
+$body-color: #212121;
 $link-color: #e53935;
 
 $font-family-base: 'Montserrat', Arial, sans-serif;
@@ -41,8 +51,23 @@ $container-max-widths: (
 
 $box-shadow: 0 0.5rem 1rem rgba(229, 57, 53, 0.15);
 
-// === IMPORT BOOTSTRAP CU VARIABILELE CUSTOMIZATE (TEMA LIGHT) ===
-@use '../../node_modules/bootstrap/scss/bootstrap' with (
+// === VARIABILE SUPLIMENTARE BOOTSTRAP ===
+$form-range-track-bg: $light-blue;
+$form-range-thumb-bg: $accent-blue;
+$form-range-thumb-border-radius: 1rem;
+
+$btn-border-radius: 1.2rem;
+$btn-padding-y: 0.5rem;
+$btn-padding-x: 1rem;
+
+$input-border-radius: 1rem;
+$input-focus-border-color: $primary-blue;
+$input-focus-box-shadow: 0 0 0 0.2rem rgba($primary-blue, 0.25);
+
+// =====================
+// === IMPORT BOOTSTRAP CU VARIABILELE CUSTOM ===
+// =====================
+@use "../../node_modules/bootstrap/scss/bootstrap" with (
   $primary: $primary,
   $secondary: $secondary,
   $success: $success,
@@ -67,10 +92,21 @@ $box-shadow: 0 0.5rem 1rem rgba(229, 57, 53, 0.15);
   $h6-font-size: $h6-font-size,
   $grid-breakpoints: $grid-breakpoints,
   $container-max-widths: $container-max-widths,
-  $box-shadow: $box-shadow
+  $box-shadow: $box-shadow,
+  $form-range-track-bg: $form-range-track-bg,
+  $form-range-thumb-bg: $form-range-thumb-bg,
+  $form-range-thumb-border-radius: $form-range-thumb-border-radius,
+  $btn-border-radius: $btn-border-radius,
+  $btn-padding-y: $btn-padding-y,
+  $btn-padding-x: $btn-padding-x,
+  $input-border-radius: $input-border-radius,
+  $input-focus-border-color: $input-focus-border-color,
+  $input-focus-box-shadow: $input-focus-box-shadow
 );
 
-// === STILURI CUSTOM TEMA LIGHT ===
+// =====================
+// === CLASA CUSTOM TEMA LIGHT ===
+// =====================
 .tema-light {
   background-color: $body-bg !important;
   color: $body-color !important;
@@ -79,24 +115,50 @@ $box-shadow: 0 0.5rem 1rem rgba(229, 57, 53, 0.15);
     color: $link-color !important;
   }
 
-  button, input, select, textarea {
-    border-radius: $border-radius !important;
-    font-family: $font-family-base !important;
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
+  input, select, textarea, button {
+    border-radius: $border-radius;
+    font-family: $font-family-base;
     box-shadow: $box-shadow;
+    transition: $transition-base;
   }
 
-  h1 { font-size: $h1-font-size !important; }
-  h2 { font-size: $h2-font-size !important; }
-  h3 { font-size: $h3-font-size !important; }
-  h4 { font-size: $h4-font-size !important; }
-  h5 { font-size: $h5-font-size !important; }
-  h6 { font-size: $h6-font-size !important; }
+  .form-control:focus,
+  .form-select:focus {
+    border-color: $primary;
+    box-shadow: 0 0 0 0.25rem rgba($primary, 0.25);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    color: $primary;
+  }
+
+  .btn-outline-primary:hover {
+    background-color: $primary;
+    color: #fff;
+  }
+
+  .form-check-input:checked {
+    background-color: $primary;
+    border-color: $primary;
+  }
+
+  input[type="range"] {
+    accent-color: $primary;
+  }
+
+  .switch-tema {
+    cursor: pointer;
+    transition: $transition-base;
+  }
+
+  .icon {
+    color: $primary;
+  }
 }
 
-// === VARIABILE CUSTOM TEMA DARK ===
+// =====================
+// === VARIABILE TEMA DARK ===
+// =====================
 $dark-primary: #6a1b9a;
 $dark-secondary: #4527a0;
 $dark-success: #2e7d32;
@@ -107,7 +169,7 @@ $dark-light: #424242;
 $dark-dark: #000000;
 
 $dark-body-bg: #3e1857;
-$dark-body-color: #683870;
+$dark-body-color: #e2d3eb;
 $dark-link-color: #b01dca;
 
 $dark-font-family-base: 'Roboto Slab', Georgia, serif;
@@ -118,10 +180,10 @@ $dark-border-radius-lg: 1.6rem;
 $dark-border-radius-sm: 0.4rem;
 
 $dark-h1-font-size: 2rem;
-$dark-h2-font-size: 1rem;
-$dark-h3-font-size: 1rem;
-$dark-h4-font-size: 1rem;
-$dark-h5-font-size: 1rem;
+$dark-h2-font-size: 1.7rem;
+$dark-h3-font-size: 1.5rem;
+$dark-h4-font-size: 1.3rem;
+$dark-h5-font-size: 1.1rem;
 $dark-h6-font-size: 1rem;
 
 $dark-box-shadow: 0 0.5rem 1.2rem rgba(255, 255, 255, 0.08);
@@ -139,7 +201,9 @@ $dark-container-max-widths: (
   xl: 1380px
 );
 
-// === STILURI CUSTOM TEMA DARK ===
+// =====================
+// === CLASA CUSTOM TEMA DARK ===
+// =====================
 .tema-dark {
   background-color: $dark-body-bg !important;
   color: $dark-body-color !important;
@@ -148,25 +212,60 @@ $dark-container-max-widths: (
     color: $dark-link-color !important;
   }
 
-  button, input, select, textarea {
-    border-radius: $dark-border-radius !important;
-    font-family: $dark-font-family-base !important;
-    font-size: $dark-font-size-base !important;
+  input, select, textarea, button {
+    border-radius: $dark-border-radius;
+    font-family: $dark-font-family-base;
+    font-size: $dark-font-size-base;
     box-shadow: $dark-box-shadow;
     background-color: $dark-primary;
-    color: #fff !important;
+    color: #fff;
     border: none;
+    transition: $transition-base;
   }
 
-  h1 { font-size: $dark-h1-font-size !important; color: $dark-link-color !important; }
-  h2 { font-size: $dark-h2-font-size !important; color: $dark-link-color !important; }
-  h3 { font-size: $dark-h3-font-size !important; color: $dark-link-color !important; }
-  h4 { font-size: $dark-h4-font-size !important; color: $dark-link-color !important; }
-  h5 { font-size: $dark-h5-font-size !important; color: $dark-link-color !important; }
-  h6 { font-size: $dark-h6-font-size !important; color: $dark-link-color !important; }
+  .form-control:focus,
+  .form-select:focus {
+    border-color: $dark-link-color;
+    box-shadow: 0 0 0 0.25rem rgba($dark-link-color, 0.3);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    color: $dark-link-color;
+  }
+
+  .btn-outline-primary {
+    border-color: $dark-link-color;
+    color: $dark-link-color;
+
+    &:hover {
+      background-color: $dark-link-color;
+      color: #fff;
+    }
+  }
+
+  .form-check-input:checked {
+    background-color: $dark-link-color;
+    border-color: $dark-link-color;
+  }
+
+  input[type="range"] {
+    accent-color: $dark-link-color;
+  }
+
+  .switch-tema {
+    cursor: pointer;
+    transition: $transition-base;
+    color: $dark-link-color;
+  }
+
+  .icon {
+    color: $dark-link-color;
+  }
 }
 
-// === BREAKPOINTS SPECIFICE DARK (doar la nevoie) ===
+// =====================
+// === MEDIA QUERIES SPECIFICE TEMA DARK ===
+// =====================
 @media (min-width: map-get($dark-grid-breakpoints, md)) {
   .tema-dark {
     font-size: 1.1rem;
@@ -177,4 +276,22 @@ $dark-container-max-widths: (
   .tema-dark {
     font-size: 1.2rem;
   }
+}
+
+// =====================
+// === STILURI CUSTOM SUPLIMENTARE ===
+// =====================
+.form-check-input:checked {
+  background-color: $primary-blue;
+  border-color: $primary-blue;
+}
+
+textarea.is-valid {
+  border-color: #28a745; // Verde pentru valid
+  box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+}
+
+textarea.is-invalid {
+  border-color: #dc3545; // Roșu pentru invalid
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
 }

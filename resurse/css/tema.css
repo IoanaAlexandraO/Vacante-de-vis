@@ -1,0 +1,71 @@
+/* tema.css */
+
+body.tema-light {
+  --bs-body-bg: #ffffff;
+  --bs-body-color: #333333;
+  --bs-primary: #527EE6;
+  --bs-secondary: #58C8E6;
+  --bs-light: #f9f9f9;
+  --bs-dark: #3A5BB4;
+  --bs-border-color: rgba(0, 0, 0, 0.125);
+  background-color: var(--bs-body-bg);
+  color: var(--bs-body-color);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+body.tema-dark {
+  --bs-body-bg: #1e1e2f;
+  --bs-body-color: #f1f1f1;
+  --bs-primary: #569FE5;
+  --bs-secondary: #51A0D5;
+  --bs-light: #2a2a3b;
+  --bs-dark: #121222;
+  --bs-border-color: rgba(255, 255, 255, 0.15);
+  background-color: var(--bs-body-bg);
+  color: var(--bs-body-color);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* Alte stiluri utile pentru a păstra compatibilitatea */
+.tema-dark .card,
+.tema-dark .list-group-item,
+.tema-dark .form-control,
+.tema-dark .form-select,
+.tema-dark .dropdown-menu,
+.tema-dark .modal-content {
+  background-color: var(--bs-light);
+  color: var(--bs-body-color);
+  border-color: var(--bs-border-color);
+}
+
+.tema-dark .form-control::placeholder {
+  color: #aaa;
+}
+
+.tema-dark a {
+  color: var(--bs-primary);
+}
+
+.tema-dark .btn-outline-secondary {
+  color: #f1f1f1;
+  border-color: #ccc;
+}
+
+.tema-dark .btn-outline-dark {
+  color: #f1f1f1;
+  border-color: #666;
+}
+
+.tema-dark .form-check-input:checked {
+  background-color: var(--bs-primary);
+  border-color: var(--bs-primary);
+}
+
+.tema-dark .bi-sun {
+  color: #fdd835;
+}
+
+.tema-light .bi-moon,
+.tema-dark .bi-sun {
+  transition: color 0.3s;
+}

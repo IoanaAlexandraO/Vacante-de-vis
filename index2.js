@@ -6,6 +6,29 @@ const sass = require('sass');
 const app = express();
 const port = 8080;
 const sharp = require('sharp');
+const pg = require('pg');
+
+const Client=pg.Client;
+
+client=new Client({
+    database:"proiect_bd",
+    user:"alexandra",
+    password:"Alexandra8",
+    host:"localhost",
+    port:5432
+})
+
+client.connect()
+client.query("select * from vacante", function(err, rezultat ){
+    console.log(err)    
+    console.log("Rezultat query: ",rezultat)
+})
+client.query("select * from unnest(enum_range(null::categorie_mare))", function(err, rezultat ){
+    console.log(err)    
+    console.log(rezultat)
+})
+
+
 
 // Global objects for storing application-wide data
 global.obiectGlobal = {
@@ -18,6 +41,37 @@ globalThis.obGlobal = {
   obErori: null,
   obImagini: null
 };
+
+app.get("/vacante", async (req, res) => {
+  try {
+    const { rows: vacante } = await client.query("SELECT * FROM vacante ORDER BY data_disponibilitate DESC");
+    // Ia categoria selectată din query sau pune "toate" dacă nu există
+    const categorie_selectata = req.query.categorie || "toate";
+    res.render("pagini/vacante", { vacante, categorie_selectata });
+  } catch (err) {
+    console.error("Eroare la extragerea vacanțelor:", err);
+    res.status(500).render("pagini/eroare", { mesaj: "Nu s-au putut încărca vacanțele." });
+  }
+});
+
+app.get("/vacanta/:id", async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    const { rows } = await client.query("SELECT * FROM vacante WHERE id = $1", [id]);
+
+    if (rows.length === 0) {
+      return res.status(404).render("pagini/eroare", { mesaj: "Vacanța nu a fost găsită." });
+    }
+
+    res.render("pagini/vacanta", { vac: rows[0] });
+  } catch (err) {
+    console.error("Eroare la afișarea vacanței:", err);
+    res.status(500).render("pagini/eroare", { mesaj: "Eroare internă la afișarea vacanței." });
+  }
+});
+
+
 app.get("/fundal", function(req, res) {
   res.render("pagini/fundal");
 });
@@ -150,6 +204,7 @@ function afisareEroare(res, identificator, titlu, text, imagine) {
     imagine: imagineCustom,
   });
 }
+app.use("/bootstrap", express.static(path.join(__dirname, "node_modules/bootstrap/dist")));
 
 // Middleware to add IP to locals
 app.use(function (req, res, next) {
