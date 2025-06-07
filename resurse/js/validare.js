@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const textarea = document.getElementById("inp-activitati");
 
     // Lista de cuvinte cheie permise
-    const cuvintePermise = ['sejur', 'city-break', 'aventura', 'relaxare', 'cruise'];
+    const cuvintePermise = ['plaja', 'relaxare', 'muzee', 'poze', 'drumetii','natura','vizite','trasee'];
 
     textarea.addEventListener("input", function () {
         const valoare = textarea.value.trim();

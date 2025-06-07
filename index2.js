@@ -213,16 +213,7 @@ app.use(function (req, res, next) {
 });
 
 // Serve static files from the 'resurse' directory with directory checks
-app.use("/resurse", function (req, res, next) {
-  const fullPath = path.join(__dirname, "resurse", req.url);
-  if (fs.existsSync(fullPath) && fs.statSync(fullPath).isDirectory()) {
-    if (!req.url.endsWith("/")) {
-      afisareEroare(res, 403);
-      return;
-    }
-  }
-  next();
-}, express.static(path.join(__dirname, "resurse")));
+
 
 // Route for home page (multiple path variants) with gallery data
 app.get(['/', '/index', '/home'], function (req, res) {
@@ -323,6 +314,45 @@ async function initGallery() {
 
   return processedImages;
 }
+// 1. Servește resursele statice PRIMELE
+app.use("/resurse", function(req, res, next) {
+  const fullPath = path.join(__dirname, "resurse", req.url);
+
+  try {
+    if (fs.existsSync(fullPath) && fs.statSync(fullPath).isDirectory()) {
+      if (!req.url.endsWith("/")) {
+        afisareEroare(res, 403, "Acces interzis", "Adaugă / la finalul directorului.");
+        return;
+      }
+    }
+  } catch (err) {
+    console.error("Eroare verificare folder:", err);
+  }
+
+  next();
+}, express.static(path.join(__dirname, "resurse"))); // <--- important să fie PRIMUL
+
+// 2. Pagini dinamice .ejs
+app.get("*ejs", function(req, res) {
+  try {
+    res.render("pagini" + req.url, { ip: req.ip }, function(err, rezultatRandare) {
+      if (err) {
+        console.log("Eroare randare:", err);
+        afisareEroare(res, 400);
+      } else {
+        res.send(rezultatRandare);
+      }
+    });
+  } catch (errRandare) {
+    console.log("Eroare generală:", errRandare);
+    afisareEroare(res, 400);
+  }
+});
+
+// 3. Rută fallback pentru 404
+app.use((req, res) => {
+  afisareEroare(res, 404, "Pagina nu a fost găsită", "Verifică URL-ul introdus.");
+});
 
 // Start the server after initializing the gallery.
 (async () => {
