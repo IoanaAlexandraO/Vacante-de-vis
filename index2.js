@@ -6,6 +6,29 @@ const sass = require('sass');
 const app = express();
 const port = 8080;
 const sharp = require('sharp');
+const pg = require('pg');
+
+const Client=pg.Client;
+
+client=new Client({
+    database:"proiect_bd",
+    user:"alexandra",
+    password:"Alexandra8",
+    host:"localhost",
+    port:5432
+})
+
+client.connect()
+client.query("select * from vacante", function(err, rezultat ){
+    console.log(err)    
+    console.log("Rezultat query: ",rezultat)
+})
+client.query("select * from unnest(enum_range(null::categorie_mare))", function(err, rezultat ){
+    console.log(err)    
+    console.log(rezultat)
+})
+
+
 
 // Global objects for storing application-wide data
 global.obiectGlobal = {
@@ -18,6 +41,37 @@ globalThis.obGlobal = {
   obErori: null,
   obImagini: null
 };
+
+app.get("/vacante", async (req, res) => {
+  try {
+    const { rows: vacante } = await client.query("SELECT * FROM vacante ORDER BY data_disponibilitate DESC");
+    // Ia categoria selectată din query sau pune "toate" dacă nu există
+    const categorie_selectata = req.query.categorie || "toate";
+    res.render("pagini/vacante", { vacante, categorie_selectata });
+  } catch (err) {
+    console.error("Eroare la extragerea vacanțelor:", err);
+    res.status(500).render("pagini/eroare", { mesaj: "Nu s-au putut încărca vacanțele." });
+  }
+});
+
+app.get("/vacanta/:id", async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    const { rows } = await client.query("SELECT * FROM vacante WHERE id = $1", [id]);
+
+    if (rows.length === 0) {
+      return res.status(404).render("pagini/eroare", { mesaj: "Vacanța nu a fost găsită." });
+    }
+
+    res.render("pagini/vacanta", { vac: rows[0] });
+  } catch (err) {
+    console.error("Eroare la afișarea vacanței:", err);
+    res.status(500).render("pagini/eroare", { mesaj: "Eroare internă la afișarea vacanței." });
+  }
+});
+
+
 app.get("/fundal", function(req, res) {
   res.render("pagini/fundal");
 });
@@ -150,6 +204,7 @@ function afisareEroare(res, identificator, titlu, text, imagine) {
     imagine: imagineCustom,
   });
 }
+app.use("/bootstrap", express.static(path.join(__dirname, "node_modules/bootstrap/dist")));
 
 // Middleware to add IP to locals
 app.use(function (req, res, next) {
@@ -158,16 +213,7 @@ app.use(function (req, res, next) {
 });
 
 // Serve static files from the 'resurse' directory with directory checks
-app.use("/resurse", function (req, res, next) {
-  const fullPath = path.join(__dirname, "resurse", req.url);
-  if (fs.existsSync(fullPath) && fs.statSync(fullPath).isDirectory()) {
-    if (!req.url.endsWith("/")) {
-      afisareEroare(res, 403);
-      return;
-    }
-  }
-  next();
-}, express.static(path.join(__dirname, "resurse")));
+
 
 // Route for home page (multiple path variants) with gallery data
 app.get(['/', '/index', '/home'], function (req, res) {
@@ -268,6 +314,45 @@ async function initGallery() {
 
   return processedImages;
 }
+// 1. Servește resursele statice PRIMELE
+app.use("/resurse", function(req, res, next) {
+  const fullPath = path.join(__dirname, "resurse", req.url);
+
+  try {
+    if (fs.existsSync(fullPath) && fs.statSync(fullPath).isDirectory()) {
+      if (!req.url.endsWith("/")) {
+        afisareEroare(res, 403, "Acces interzis", "Adaugă / la finalul directorului.");
+        return;
+      }
+    }
+  } catch (err) {
+    console.error("Eroare verificare folder:", err);
+  }
+
+  next();
+}, express.static(path.join(__dirname, "resurse"))); // <--- important să fie PRIMUL
+
+// 2. Pagini dinamice .ejs
+app.get("*ejs", function(req, res) {
+  try {
+    res.render("pagini" + req.url, { ip: req.ip }, function(err, rezultatRandare) {
+      if (err) {
+        console.log("Eroare randare:", err);
+        afisareEroare(res, 400);
+      } else {
+        res.send(rezultatRandare);
+      }
+    });
+  } catch (errRandare) {
+    console.log("Eroare generală:", errRandare);
+    afisareEroare(res, 400);
+  }
+});
+
+// 3. Rută fallback pentru 404
+app.use((req, res) => {
+  afisareEroare(res, 404, "Pagina nu a fost găsită", "Verifică URL-ul introdus.");
+});
 
 // Start the server after initializing the gallery.
 (async () => {

@@ -1,0 +1,81 @@
+@media (max-width: 1792px) {
+  * {
+    font-size: small;
+  }
+}
+
+nav {
+  background: #527EE6;
+  color: #fff;
+  padding: 10px 0;
+}
+nav ul.meniu {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+}
+nav ul.meniu li {
+  position: relative;
+}
+nav ul.meniu li a {
+  display: block;
+  padding: 10px 20px;
+  color: inherit;
+  text-decoration: none;
+}
+@media (min-width: 1792px) {
+  nav ul.meniu li.has-submenu > a, nav ul.meniu li.no-submenu > a {
+    position: relative;
+  }
+  nav ul.meniu li.has-submenu > a::after, nav ul.meniu li.no-submenu > a::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 3px;
+    background: linear-gradient(to right, #527EE6, #58C8E6);
+    transition: all 0.4s ease-in-out;
+    transform: translateX(-50%);
+  }
+  nav ul.meniu li.has-submenu > a:hover::after, nav ul.meniu li.no-submenu > a:hover::after {
+    width: 100%;
+  }
+}
+nav ul.meniu li.has-submenu ul.submenu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #527EE6;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: none;
+  width: 150px;
+}
+nav ul.meniu li.has-submenu ul.submenu li a {
+  display: block;
+  padding: 10px 20px;
+  color: #fff;
+  text-decoration: none;
+}
+nav ul.meniu li.has-submenu:hover > ul.submenu {
+  display: block;
+}
+nav ul.meniu li.has-submenu:hover > ul.submenu li a:hover {
+  background: #fff;
+  color: #527EE6;
+}
+@media (max-width: 1000px) {
+  nav ul.meniu li .fas.fa-home:before {
+    content: "\e1b0";
+    font-size: small;
+  }
+}
+@media (max-width: 1000px) {
+  nav ul.meniu li a {
+    font-size: small;
+  }
+}
