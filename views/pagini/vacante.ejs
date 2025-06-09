@@ -50,13 +50,44 @@
   <script src="/resurse/js/tema.js" defer></script>
   <script src="/resurse/js/validare.js" defer></script>
   <script src="/resurse/js/vacante.js" defer></script>
+  
+  <style>
+    /* Stiluri pentru afișarea selectivă */
+    .card-details-extra {
+      display: none;
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid #e9ecef;
+    }
+    
+    .card-details-extra.show {
+      display: block;
+    }
+    
+    .toggle-details {
+      color: #007bff;
+      cursor: pointer;
+      font-size: 0.85rem;
+      text-decoration: none;
+      border: none;
+      background: none;
+      padding: 0;
+    }
+    
+    .toggle-details:hover {
+      text-decoration: underline;
+      color: #0056b3;
+    }
+    
+    /* .card-essential-info { Informațiile esențiale rămân vizibile } */
+  </style>
 </head>
 <body>
   <%- include("../fragmente/header") %>
 
   <main class="container py-4">
     <div class="d-flex justify-content-end mb-3">
-      <button class="switch-tema btn btn-outline-primary"><i class="bi bi-sun me-1"></i><span class="d-none d-sm-inline">Schimbă tema</span></button> <!-- ✅ -->
+      <button class="switch-tema btn btn-outline-primary"><i class="bi bi-sun me-1"></i><span class="d-none d-sm-inline">Schimbă tema</span></button>
     </div>
 
     <h1 class="mb-4 text-primary">Vacanțe <%= categorie_selectata !== "toate" ? formatDenumire(categorie_selectata) : "" %></h1>
@@ -117,7 +148,6 @@
           <input type="date" id="inp-data" class="form-control">
         </div>
 
-        <!-- ✅ Floating label pentru activitati -->
         <div class="col-md-8 form-floating">
           <textarea class="form-control" placeholder="Activități..." id="inp-activitati" style="height: 100px"></textarea>
           <label for="inp-activitati">Activități (cuvinte cheie)</label>
@@ -131,39 +161,20 @@
       </div>
     </section>
 
+   
     <section id="vacante-container" class="row g-4">
       <% vacante.forEach(v => { %>
         <div class="col-md-6 col-lg-4">
-          <article class="card h-100 shadow-sm border-0 rounded-3 <%= v.categorie %>" id="artc-<%= v.id %>">
+          <article 
+            class="card h-100 shadow-sm border-0 rounded-3 <%= v.categorie %>" 
+            id="artc-<%= v.id %>"
+            data-dificultate="<%= v.dificultate %>"
+            data-pasaport="<%= v.pasaport_necesar %>"
+          >
             <img src="/resurse/imagini/vacante/<%= v.imagine %>" alt="<%= v.nume %>" class="card-img-top rounded-top-3">
-
             <div class="card-body d-flex flex-column bg-white text-dark">
               <h5 class="card-title text-dark-gray"><%= v.nume %></h5>
-              <p class="card-subtitle mb-2 text-muted">Categorie: <%= formatDenumire(v.categorie) %></p>
               <p class="card-text"><strong>Preț:</strong> <%= v.pret %> €</p>
-              <p class="card-text"><strong>Disponibilă din:</strong> <%= formatData(v.data_disponibilitate) %></p>
-              <p class="card-text"><strong>Dificultate:</strong> <em><%= v.dificultate %></em></p>
-              
-              <!-- Câmpurile lipsă pentru filtrare -->
-              <% if (v.pasaport_necesar) { %>
-                <p class="card-text"><strong>Pașaport necesar:</strong> <span class="badge bg-secondary"><%= v.pasaport_necesar %></span></p>
-              <% } %>
-              
-              <p class="card-text"><strong>Transport inclus:</strong> 
-                <span class="badge <%= v.transport_inclus ? 'bg-success' : 'bg-danger' %>">
-                  <%= v.transport_inclus ? 'true' : 'false' %>
-                </span>
-              </p>
-              
-              <% if (v.durata_zile) { %>
-                <p class="card-text"><strong>Durată:</strong> <%= v.durata_zile %> zile</p>
-              <% } %>
-              
-              <% if (v.activitati) { %>
-                <p class="card-text"><strong>Activități:</strong> <small class="text-muted"><%= v.activitati %></small></p>
-              <% } %>
-              
-              <p class="card-text flex-grow-1"><%= v.descriere %></p>
               <a href="/vacanta/<%= v.id %>" class="btn btn-outline-primary mt-auto">
                 <i class="bi bi-arrow-right-circle-fill me-1"></i>Vezi detalii
               </a>
@@ -175,5 +186,7 @@
   </main>
 
   <%- include("../fragmente/footer") %>
+  
+  
 </body>
 </html>

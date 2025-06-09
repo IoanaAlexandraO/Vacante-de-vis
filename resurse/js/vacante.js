@@ -47,114 +47,32 @@ window.addEventListener("DOMContentLoaded", () => {
     const valNume = inpNume.value.trim().toLowerCase();
     const valPret = parseInt(inpPret.value);
     const valDificultate = inpDificultate.value.toLowerCase();
-    const valCuloare = inpCuloare.value.toLowerCase();
-    const valTransport = inpTransport.checked;
-    const valDurata = parseInt(inpDurata.value);
-    const valData = inpData.value;
-    
-    const valActivitati = inpActivitati.value
-      .toLowerCase()
-      .split(/[,;]/)
-      .map(a => a.trim())
-      .filter(a => a.length > 0);
+    const valCuloare = inpCuloare.value.toLowerCase(); // folosit pentru "culoare pașaport"
+    // restul inputurilor pot fi eliminate dacă nu mai sunt necesare
 
     vacante.forEach(card => {
       let ok = true;
 
-      // Extragere nume
+      // Extragere nume și preț din elementele vizibile
       const nume = card.querySelector(".card-title")?.textContent.toLowerCase() || "";
-      
-      // Extragere preț - caută textul care conține "Preț:"
-      const pretElement = Array.from(card.querySelectorAll(".card-text"))
-        .find(el => el.textContent.includes("Preț:"));
+      const pretElement = Array.from(card.querySelectorAll(".card-text")).find(el => el.textContent.includes("Preț:"));
       const pretText = pretElement?.textContent.match(/(\d+)/);
       const pret = pretText ? parseInt(pretText[1]) : 0;
 
-      // Extragere dificultate
-      const dificultateElement = Array.from(card.querySelectorAll(".card-text"))
-        .find(el => el.textContent.includes("Dificultate:"));
-      const dificultateText = dificultateElement?.textContent.toLowerCase() || "";
+      // Extragere din atributele personalizate
+      const dificultate = (card.getAttribute("data-dificultate") || "").toLowerCase();
+      const pasaport = (card.getAttribute("data-pasaport") || "").toLowerCase();
 
-      // Extragere culoare pașaport - ÎMBUNĂTĂȚIT
-      let pasaportCuloare = "";
-      const pasaportElement = Array.from(card.querySelectorAll(".card-text"))
-        .find(el => el.textContent.includes("Pașaport necesar:"));
-      if (pasaportElement) {
-        const pasaportText = pasaportElement.textContent.toLowerCase();
-        if (pasaportText.includes("rosu") || pasaportText.includes("roșu")) pasaportCuloare = "rosu";
-        else if (pasaportText.includes("albastru")) pasaportCuloare = "albastru";
-        else if (pasaportText.includes("verde")) pasaportCuloare = "verde";
-        else if (pasaportText.includes("negru")) pasaportCuloare = "negru";
-      }
-
-      // Extragere transport inclus - ÎMBUNĂTĂȚIT
-      let transportInclus = false;
-      const transportElement = Array.from(card.querySelectorAll(".card-text"))
-        .find(el => el.textContent.includes("Transport inclus:"));
-      if (transportElement) {
-        const transportText = transportElement.textContent.toLowerCase();
-        transportInclus = transportText.includes("true");
-      }
-
-      // Extragere durată - ÎMBUNĂTĂȚIT
-      let durata = null;
-      const durataElement = Array.from(card.querySelectorAll(".card-text"))
-        .find(el => el.textContent.includes("Durată:"));
-      if (durataElement) {
-        const durataMatch = durataElement.textContent.match(/(\d+)\s*zile/);
-        if (durataMatch) {
-          durata = parseInt(durataMatch[1]);
-        }
-      }
-
-      // Extragere activități - ÎMBUNĂTĂȚIT
-      let activitati = "";
-      const activitatiElement = Array.from(card.querySelectorAll(".card-text"))
-        .find(el => el.textContent.includes("Activități:"));
-      if (activitatiElement) {
-        activitati = activitatiElement.textContent.toLowerCase();
-      }
-
-      // Extragere dată - CORECTATĂ
-      const dataElement = Array.from(card.querySelectorAll(".card-text"))
-        .find(el => el.textContent.includes("Disponibilă din:"));
-      const dataText = dataElement?.textContent || "";
-      const dataStart = parseRomanianDate(dataText);
-
-      // Aplicare filtre
+      // Aplicare filtre vizuale
       if (valNume && !nume.includes(valNume)) ok = false;
       if (pret > valPret) ok = false;
-      if (valData && dataStart && new Date(valData) > dataStart) ok = false;
 
-      // Filtrare după dificultate
-      if (valDificultate !== "oricare") {
-        if (valDificultate === "usor" && !dificultateText.includes("ușor") && !dificultateText.includes("usor")) ok = false;
-        else if (valDificultate === "mediu" && !dificultateText.includes("mediu")) ok = false;
-        else if (valDificultate === "dificil" && !dificultateText.includes("dificil")) ok = false;
-      }
-      
-      // Filtrare după culoare pașaport
-      if (valCuloare !== "oricare" && pasaportCuloare !== valCuloare) ok = false;
-      
-      // Filtrare transport
-      if (valTransport && !transportInclus) ok = false;
-      
-      // Filtrare durată
-      if (!isNaN(valDurata) && durata !== null && durata > valDurata) ok = false;
+      // Filtrare după dificultate (dacă se selectează altceva decît "oricare")
+      if (valDificultate !== "oricare" && !dificultate.includes(valDificultate)) ok = false;
 
-      // Filtrare activități
-      if (valActivitati.length > 0) {
-        let areActivitate = false;
-        for (let activ of valActivitati) {
-          if (activitati.includes(activ)) {
-            areActivitate = true;
-            break;
-          }
-        }
-        if (!areActivitate) ok = false;
-      }
+      // Filtrare după culoarea pașaportului (dacă se selectează altceva decît "oricare")
+      if (valCuloare !== "oricare" && !pasaport.includes(valCuloare)) ok = false;
 
-      // Afișare/ascundere card
       card.style.display = ok ? "block" : "none";
     });
   });
@@ -202,4 +120,19 @@ window.addEventListener("DOMContentLoaded", () => {
     btnSortarePret.innerHTML = `<i class="bi bi-arrow-down-up me-1"></i><span class="d-none d-sm-inline">Sortare după preț</span>`;
     sortAscendent = true;
   });
+
+  document.getElementById('btn-filtrare').addEventListener('click', function() {
+    const searchValue = document.getElementById('inp-nume').value.toLowerCase();
+
+    document.querySelectorAll('#vacante-container .card').forEach(card => {
+        // Folosește titlul din informațiile esențiale
+        const title = card.querySelector('.card-essential-info h5').textContent.toLowerCase();
+
+        if (title.includes(searchValue)) {
+            card.style.display = ''; // afișează cardul
+        } else {
+            card.style.display = 'none'; // ascunde cardul
+        }
+    });
+});
 });

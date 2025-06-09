@@ -2,35 +2,44 @@
 <html lang="ro">
 <head>
   <%- include("../fragmente/head") %>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+  <!-- Stiluri specifice paginii de vacanță -->
   <link rel="stylesheet" href="/resurse/css/vacanta.css">
+  <script src="/resurse/js/tema.js" defer></script>
 </head>
 <body>
   <%- include("../fragmente/header") %>
 
-  <main class="pagina-vacanta">
+  <main class="container py-4">
     <h1><%= vac.nume %></h1>
 
-    <section class="detalii-vacanta">
-     <img src="/resurse/imagini/vacante/<%= vac.imagine %>" alt="<%= vac.nume %>" class="imagine-vacanta">
-
-
-      <div class="info-vacanta">
-        <p><strong>Descriere:</strong> <%= vac.descriere %></p>
-        <ul>
-          <li><strong>Categorie:</strong> <%= vac.categorie %></li>
-          <li><strong>Dificultate:</strong> <%= vac.dificultate %></li>
-          <li><strong>Durată:</strong> <%= vac.durata_zile %> zile</li>
-          <li><strong>Preț:</strong> <%= vac.pret %> €</li>
-          <li><strong>Disponibilă din:</strong> <%= vac.data_disponibilitate.toLocaleDateString("ro-RO") %></li>
-          <li><strong>Transport inclus:</strong> <%= vac.transport_inclus ? "Da" : "Nu" %></li>
-          <li><strong>Pașaport necesar:</strong> <%= vac.pasaport_necesar || 'Nespecificat' %></li>
-          <li><strong>Activități:</strong> <%= vac.activitati %></li>
-        </ul>
-        <button class="btn btn-primary">Rezervă acum</button>
-      </div>
+    <section class="detalii-vacanta row g-4">
+     <div class="col-md-6">
+        <img src="/resurse/imagini/vacante/<%= vac.imagine %>" alt="<%= vac.nume %>" class="img-fluid">
+     </div>
+     <div class="col-md-6">
+       <div class="info-vacanta">
+         <p><strong>Descriere:</strong> <%= vac.descriere %></p>
+         <ul class="list-unstyled">
+           <li><strong>Categorie:</strong> <%= vac.categorie %></li>
+           <li><strong>Dificultate:</strong> <%= vac.dificultate %></li>
+           <li><strong>Durată:</strong> <%= vac.durata_zile %> zile</li>
+           <li><strong>Preț:</strong> <%= vac.pret %> €</li>
+           <li><strong>Disponibilă din:</strong> <%= vac.data_disponibilitate.toLocaleDateString("ro-RO") %></li>
+           <li><strong>Transport inclus:</strong> <%= vac.transport_inclus ? "Da" : "Nu" %></li>
+           <li><strong>Pașaport necesar:</strong> <%= vac.pasaport_necesar || 'Nespecificat' %></li>
+           <li><strong>Activități:</strong> <%= vac.activitati %></li>
+         </ul>
+         <button class="btn btn-primary">Rezervă acum</button>
+       </div>
+     </div>
     </section>
   </main>
 
   <%- include("../fragmente/footer") %>
+
+  <!-- Bootstrap JS Bundle (include Popper) -->
+  <script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

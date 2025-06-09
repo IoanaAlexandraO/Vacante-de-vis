@@ -337,14 +337,18 @@ app.get("*ejs", function(req, res) {
   try {
     res.render("pagini" + req.url, { ip: req.ip }, function(err, rezultatRandare) {
       if (err) {
-        console.log("Eroare randare:", err);
+        console.log("Eroare detalii 1:", req.url);
+        console.log("Eroare detalii 2:", req.ip);
+        console.log("Eroare randare 3:", err);
         afisareEroare(res, 400);
       } else {
         res.send(rezultatRandare);
       }
     });
   } catch (errRandare) {
-    console.log("Eroare generală:", errRandare);
+    console.log("Eroare detalii 4:", req.url);
+    console.log("Eroare detalii 5:", req.ip);
+    console.log("Eroare generală 6:", errRandare);
     afisareEroare(res, 400);
   }
 });

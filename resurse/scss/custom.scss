@@ -9,7 +9,7 @@ $accent-blue: #51A0D5;
 // =====================
 // === VARIABILE TEMA LIGHT ===
 // =====================
-$primary: purple;
+$primary: #8bcbd6;
 $secondary: #43a047;
 $success: #00bfae;
 $info: #2979ff;
@@ -20,7 +20,7 @@ $dark: #212121;
 
 $body-bg: #f8f9fa;
 $body-color: #212121;
-$link-color: #e53935;
+$link-color: #0c4949;
 
 $font-family-base: 'Montserrat', Arial, sans-serif;
 $font-size-base: 1.1rem;
@@ -118,59 +118,65 @@ $input-focus-box-shadow: 0 0 0 0.2rem rgba($primary-blue, 0.25);
   input, select, textarea, button {
     border-radius: $border-radius;
     font-family: $font-family-base;
+    font-size: $font-size-base;
     box-shadow: $box-shadow;
+    background-color: $primary;
+    color: #fff;
+    border: none;
     transition: $transition-base;
   }
 
   .form-control:focus,
   .form-select:focus {
-    border-color: $primary;
-    box-shadow: 0 0 0 0.25rem rgba($primary, 0.25);
+    border-color: $link-color;
+    box-shadow: 0 0 0 0.25rem rgba($link-color, 0.3);
   }
 
   h1, h2, h3, h4, h5, h6 {
-    color: $primary;
+    color: $link-color;
   }
-
-  .btn-outline-primary:hover {
+.btn-outline-primary:hover {
     background-color: $primary;
     color: #fff;
   }
+ 
 
   .form-check-input:checked {
-    background-color: $primary;
-    border-color: $primary;
+    background-color: $link-color;
+    border-color: $link-color;
   }
 
   input[type="range"] {
-    accent-color: $primary;
+    accent-color: $link-color;
   }
 
   .switch-tema {
     cursor: pointer;
     transition: $transition-base;
+    color: $link-color;
   }
 
   .icon {
-    color: $primary;
+    color: $link-color;
   }
 }
+
 
 // =====================
 // === VARIABILE TEMA DARK ===
 // =====================
-$dark-primary: #6a1b9a;
-$dark-secondary: #4527a0;
-$dark-success: #2e7d32;
-$dark-info: #0288d1;
-$dark-warning: #fbc02d;
-$dark-danger: #c62828;
-$dark-light: #424242;
-$dark-dark: #000000;
+$dark-primary: #abc0ee;       // un albastru regal, profund
+$dark-secondary: #1c1f26;     // gri-închis metalic
+$dark-success: #2e7d32;       // verde intens, dar sobru
+$dark-info: #1976d2;          // albastru clasic pentru informații
+$dark-warning: #ffa000;       // galben chihlimbar
+$dark-danger: #d32f2f;        // roșu carmin
+$dark-light: #5f6368;         // gri rece
+$dark-dark: #0d0d0d;          // aproape negru
 
-$dark-body-bg: #3e1857;
-$dark-body-color: #e2d3eb;
-$dark-link-color: #b01dca;
+$dark-body-bg: #121212;       // fundal general – negru mat modern
+$dark-body-color: #e0e0e0;    // text deschis, ușor albăstrui
+$dark-link-color: #abc0ee; 
 
 $dark-font-family-base: 'Roboto Slab', Georgia, serif;
 $dark-font-size-base: 1.05rem;
@@ -232,16 +238,11 @@ $dark-container-max-widths: (
   h1, h2, h3, h4, h5, h6 {
     color: $dark-link-color;
   }
-
-  .btn-outline-primary {
-    border-color: $dark-link-color;
-    color: $dark-link-color;
-
-    &:hover {
-      background-color: $dark-link-color;
-      color: #fff;
-    }
+.btn-outline-primary:hover {
+    background-color: $dark-primary;
+    color: #fff;
   }
+ 
 
   .form-check-input:checked {
     background-color: $dark-link-color;
