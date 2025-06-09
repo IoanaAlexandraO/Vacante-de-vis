@@ -37,3 +37,56 @@ INSERT INTO vacante (nume, descriere, imagine, categorie, dificultate, pret, dur
 ('Tur Balcani', 'Explorează Serbia, Muntenegru și Bosnia.', 'balcani.jpg', 'sejur', 'mediu', 1250, 6, '2025-09-15', NULL, 'vizite, gastronomie, culturi', TRUE),
 ('Tabără de supraviețuire', 'Test de rezistență în natură.', 'tabara.jpg', 'aventura', 'dificil', 500, 5, '2025-07-20', NULL, 'cazare cort, gătit, trasee', FALSE),
 ('Mini-vacanță la Roma', 'City-break pentru iubitorii de istorie.', 'roma.jpg', 'city-break', 'usor', 720, 4, '2025-06-28', 'rosu', 'istorie, ruine, pizza', TRUE);
+
+
+-- Tabel pentru seturi de vacanțe
+CREATE TABLE seturi (
+    id SERIAL PRIMARY KEY,
+    nume_set VARCHAR(100) NOT NULL,
+    descriere_set TEXT
+);
+
+-- Tabel de legătură: seturi <-> vacante
+CREATE TABLE asociere_set (
+    id SERIAL PRIMARY KEY,
+    id_set INT REFERENCES seturi(id) ON DELETE CASCADE,
+    id_produs INT REFERENCES vacante(id) ON DELETE CASCADE
+);
+
+
+INSERT INTO seturi (nume_set, descriere_set) VALUES
+('Relaxare Exotică', 'Pachet combinat pentru destinații de relaxare de vis.'),
+('City Explorer', 'Set ideal pentru explorarea celor mai frumoase orașe.'),
+('Aventură Extremă', 'Pachet pentru iubitorii de adrenalină și natură.'),
+('Croaziere Premium', 'Combină croaziere luxoase pentru o vacanță completă.'),
+('Vacanțe Mixte', 'Un mix între relaxare, aventură și explorare urbană.');
+
+
+-- Set 1: Relaxare Exotică
+INSERT INTO asociere_set (id_set, id_produs) VALUES
+(1, 1),  -- Sejur în Maldive
+(1, 12), -- Sejur Grecia All-Inclusive
+(1, 6);  -- Weekend la Bran
+
+-- Set 2: City Explorer
+INSERT INTO asociere_set (id_set, id_produs) VALUES
+(2, 2),  -- City-break Paris
+(2, 8),  -- City-break Berlin
+(2, 15); -- Mini-vacanță la Roma
+
+-- Set 3: Aventură Extremă
+INSERT INTO asociere_set (id_set, id_produs) VALUES
+(3, 3),  -- Expediție în Nepal
+(3, 7),  -- Safari în Kenya
+(3, 14); -- Tabără de supraviețuire
+
+-- Set 4: Croaziere Premium
+INSERT INTO asociere_set (id_set, id_produs) VALUES
+(4, 4),  -- Croazieră Mediteraneană
+(4, 11); -- Croazieră fiorduri norvegiene
+
+-- Set 5: Vacanțe Mixte
+INSERT INTO asociere_set (id_set, id_produs) VALUES
+(5, 5),  -- Vacanță în Thailanda
+(5, 13), -- Tur Balcani
+(5, 10); -- Vacanță în Islanda

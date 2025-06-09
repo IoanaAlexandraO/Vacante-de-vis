@@ -10086,7 +10086,7 @@ textarea.form-control-lg {
   color: #e0e0e0 !important;
 }
 .tema-dark a {
-  color: #abc0ee !important;
+  color: #101f3f !important;
 }
 .tema-dark input, .tema-dark select, .tema-dark textarea, .tema-dark button {
   border-radius: 1rem;
@@ -10100,30 +10100,30 @@ textarea.form-control-lg {
 }
 .tema-dark .form-control:focus,
 .tema-dark .form-select:focus {
-  border-color: #abc0ee;
-  box-shadow: 0 0 0 0.25rem rgba(171, 192, 238, 0.3);
+  border-color: #101f3f;
+  box-shadow: 0 0 0 0.25rem rgba(16, 31, 63, 0.3);
 }
 .tema-dark h1, .tema-dark h2, .tema-dark h3, .tema-dark h4, .tema-dark h5, .tema-dark h6 {
-  color: #abc0ee;
+  color: #101f3f;
 }
 .tema-dark .btn-outline-primary:hover {
   background-color: #abc0ee;
   color: #fff;
 }
 .tema-dark .form-check-input:checked {
-  background-color: #abc0ee;
-  border-color: #abc0ee;
+  background-color: #101f3f;
+  border-color: #101f3f;
 }
 .tema-dark input[type=range] {
-  accent-color: #abc0ee;
+  accent-color: #101f3f;
 }
 .tema-dark .switch-tema {
   cursor: pointer;
   transition: all 0.3s ease-in-out;
-  color: #abc0ee;
+  color: #101f3f;
 }
 .tema-dark .icon {
-  color: #abc0ee;
+  color: #101f3f;
 }
 
 @media (min-width: 870px) {

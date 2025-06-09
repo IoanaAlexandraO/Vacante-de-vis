@@ -42,6 +42,38 @@ globalThis.obGlobal = {
   obImagini: null
 };
 
+
+app.get("/seturi", async (req, res) => {
+  try {
+    // Selectează toate seturile
+    const { rows: seturi } = await client.query("SELECT * FROM seturi");
+
+    // Pentru fiecare set, încarcă vacanțele și calculează prețul
+    for (let set of seturi) {
+      const { rows: vacante } = await client.query(`
+        SELECT v.* FROM vacante v
+        JOIN asociere_set a ON v.id = a.id_produs
+        WHERE a.id_set = $1
+      `, [set.id]);
+
+      set.vacante = vacante;
+
+      const suma = vacante.reduce((acc, v) => acc + Number(v.pret), 0);
+      const reducere = Math.min(5, vacante.length) * 0.05;
+      set.pret_final = (suma * (1 - reducere)).toFixed(2);
+    }
+
+    res.render("pagini/seturi", { seturi });
+
+  } catch (err) {
+    console.error("Eroare la afișarea seturilor:", err);
+    res.status(500).render("pagini/eroare", { mesaj: "Eroare internă la afișarea seturilor." });
+  }
+});
+
+
+
+
 app.get("/vacante", async (req, res) => {
   try {
     const { rows: vacante } = await client.query("SELECT * FROM vacante ORDER BY data_disponibilitate DESC");
@@ -64,7 +96,32 @@ app.get("/vacanta/:id", async (req, res) => {
       return res.status(404).render("pagini/eroare", { mesaj: "Vacanța nu a fost găsită." });
     }
 
-    res.render("pagini/vacanta", { vac: rows[0] });
+    const vac = rows[0];
+
+    // Caută seturile în care apare această vacanță
+    const { rows: seturi } = await client.query(`
+      SELECT s.* FROM seturi s
+      JOIN asociere_set a ON s.id = a.id_set
+      WHERE a.id_produs = $1
+    `, [id]);
+
+    for (let set of seturi) {
+      // Vacanțele din fiecare set
+      const { rows: vacante } = await client.query(`
+        SELECT v.* FROM vacante v
+        JOIN asociere_set a ON v.id = a.id_produs
+        WHERE a.id_set = $1
+      `, [set.id]);
+
+      set.vacante = vacante;
+
+      const suma = vacante.reduce((acc, v) => acc + Number(v.pret), 0);
+      const reducere = Math.min(5, vacante.length) * 0.05;
+      set.pret_final = (suma * (1 - reducere)).toFixed(2);
+    }
+
+    res.render("pagini/vacanta", { vac, seturi });
+
   } catch (err) {
     console.error("Eroare la afișarea vacanței:", err);
     res.status(500).render("pagini/eroare", { mesaj: "Eroare internă la afișarea vacanței." });
@@ -337,18 +394,14 @@ app.get("*ejs", function(req, res) {
   try {
     res.render("pagini" + req.url, { ip: req.ip }, function(err, rezultatRandare) {
       if (err) {
-        console.log("Eroare detalii 1:", req.url);
-        console.log("Eroare detalii 2:", req.ip);
-        console.log("Eroare randare 3:", err);
+        console.log("Eroare randare:", err);
         afisareEroare(res, 400);
       } else {
         res.send(rezultatRandare);
       }
     });
   } catch (errRandare) {
-    console.log("Eroare detalii 4:", req.url);
-    console.log("Eroare detalii 5:", req.ip);
-    console.log("Eroare generală 6:", errRandare);
+    console.log("Eroare generală:", errRandare);
     afisareEroare(res, 400);
   }
 });

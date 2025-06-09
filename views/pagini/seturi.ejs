@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ro">
+
+<head>
+  <%- include("../fragmente/head") %>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <!-- Stiluri specifice paginii de vacanță -->
+    <link rel="stylesheet" href="/resurse/css/vacanta.css">
+    <script src="/resurse/js/tema.js" defer></script>
+</head>
+
+<body>
+  <%- include("../fragmente/header") %>
+
+    <main class="container py-4">
+  <h1 class="mb-4">Seturi disponibile</h1>
+
+  <% if (seturi.length === 0) { %>
+    <p>Nu există seturi momentan.</p>
+  <% } else { %>
+    <% seturi.forEach(set => { %>
+      <article class="card mb-4 shadow-sm">
+        <div class="card-body">
+          <h2 class="card-title"><%= set.nume_set %></h2>
+
+          <ul class="list-group list-group-flush mb-3">
+            <% set.vacante.forEach(v => { %>
+              <li class="list-group-item">
+                <a href="/vacanta/<%= v.id %>" class="fw-bold text-decoration-none text-primary">
+                  <%= v.nume %>
+                </a>
+                – <%= v.pret %> EUR
+              </li>
+            <% }) %>
+          </ul>
+
+          <p><strong>Preț final cu reducere:</strong> <%= set.pret_final %> EUR</p>
+        </div>
+      </article>
+    <% }) %>
+  <% } %>
+</main>
+
+
+    
+
+    <%- include("../fragmente/footer") %>
+
+      <!-- Bootstrap JS Bundle (include Popper) -->
+      <script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
