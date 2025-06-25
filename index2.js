@@ -8,6 +8,25 @@ const port = 8080;
 const sharp = require('sharp');
 const pg = require('pg');
 
+
+
+
+
+const formidable=require("formidable");
+const {Utilizator}=require("./module_proprii/utilizator.js")
+const session=require('express-session');
+const Drepturi = require("./module_proprii/drepturi.js");
+
+const AccesBD=require("./module_proprii/accesbd.js")
+AccesBD.getInstanta().select({tabel:"vacante", campuri:["*"]},function(err,rez){
+    console.log("-----------------Acces BD ---------------- ")
+    console.log(err)
+    console.log(rez)
+})
+
+
+
+
 const Client=pg.Client;
 
 client=new Client({
@@ -272,11 +291,12 @@ app.use(function (req, res, next) {
 // Serve static files from the 'resurse' directory with directory checks
 
 
+
 // Route for home page (multiple path variants) with gallery data
 app.get(['/', '/index', '/home'], function (req, res) {
   const ip = req.ip;
-
-  res.render('pagini/index', {
+res.render("pagini/index",{ip:req.ip, imagini:obGlobal.obImagini.imagini})
+res.render('pagini/index', {
     ip: req.ip,
     imagini: obGlobal.obImagini.imagini,
     cale_galerie: obGlobal.obImagini.cale_galerie
@@ -371,6 +391,98 @@ async function initGallery() {
 
   return processedImages;
 }
+
+app.post("/inregistrare",function(req, res){
+    var username;
+    var poza;
+    var formular= new formidable.IncomingForm()
+    formular.parse(req, function(err, campuriText, campuriFisier ){//4
+        console.log("Inregistrare:",campuriText);
+
+
+        console.log(campuriFisier);
+        console.log(poza, username);
+        var eroare="";
+
+
+        // TO DO var utilizNou = creare utilizator
+        var utilizNou =new Utilizator();
+        try{
+            utilizNou.setareNume=campuriText.nume[0];
+            utilizNou.setareUsername=campuriText.username[0];
+            utilizNou.email=campuriText.email[0]
+            utilizNou.prenume=campuriText.prenume[0]
+           
+            utilizNou.parola=campuriText.parola[0];
+            utilizNou.culoare_chat=campuriText.culoare_chat[0];
+            utilizNou.poza= poza;
+            Utilizator.getUtilizDupaUsername(campuriText.username[0], {}, function(u, parametru ,eroareUser ){
+                if (eroareUser==-1){//nu exista username-ul in BD
+                    //TO DO salveaza utilizator
+                    utilizNou.salvareUtilizator()
+                }
+                else{
+                    eroare+="Mai exista username-ul";
+                }
+
+
+                if(!eroare){
+                    res.render("pagini/inregistrare", {raspuns:"Inregistrare cu succes!"})
+                   
+                }
+                else
+                    res.render("pagini/inregistrare", {err: "Eroare: "+eroare});
+            })
+           
+
+
+        }
+        catch(e){
+            console.log(e);
+            eroare+= "Eroare site; reveniti mai tarziu";
+            console.log(eroare);
+            res.render("pagini/inregistrare", {err: "Eroare: "+eroare})
+        }
+   
+
+    });
+    formular.on("field", function(nume,val){  // 1
+   
+        console.log(`--- ${nume}=${val}`);
+       
+        if(nume=="username")
+            username=val;
+    })
+    formular.on("fileBegin", function(nume,fisier){ //2
+        console.log("fileBegin");
+       
+        console.log(nume,fisier);
+        //TO DO adaugam folderul poze_uploadate ca static si sa fie creat de aplicatie
+        //TO DO in folderul poze_uploadate facem folder cu numele utilizatorului (variabila folderUser)
+        var folderUser=path.join(__dirname, "poze_uploadate", username);
+        if (!fs.existsSync(folderUser))
+            fs.mkdirSync(folderUser)
+       
+        fisier.filepath=path.join(folderUser, fisier.originalFilename)
+        poza=fisier.originalFilename;
+        //fisier.filepath=folderUser+"/"+fisier.originalFilename
+        console.log("fileBegin:",poza)
+        console.log("fileBegin, fisier:",fisier)
+
+
+    })    
+    formular.on("file", function(nume,fisier){//3
+        console.log("file");
+        console.log(nume,fisier);
+    });
+});
+
+
+
+app.get(/^\/resurse\/[a-zA-Z0-9_\/]*$/, function(req, res, next){
+    afisareEroare(res,403);
+})
+
 // 1. Servește resursele statice PRIMELE
 app.use("/resurse", function(req, res, next) {
   const fullPath = path.join(__dirname, "resurse", req.url);
