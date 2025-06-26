@@ -295,13 +295,14 @@ app.use(function (req, res, next) {
 // Route for home page (multiple path variants) with gallery data
 app.get(['/', '/index', '/home'], function (req, res) {
   const ip = req.ip;
-res.render("pagini/index",{ip:req.ip, imagini:obGlobal.obImagini.imagini})
-res.render('pagini/index', {
-    ip: req.ip,
+
+  res.render("pagini/index", {
+    ip: ip,
     imagini: obGlobal.obImagini.imagini,
-    cale_galerie: obGlobal.obImagini.cale_galerie
+    cale_galerie: obGlobal.obImagini.cale_galerie // ✅ acum e inclusă
   });
 });
+
 
 // Function to process images into "mic" folder only
 async function initGallery() {
