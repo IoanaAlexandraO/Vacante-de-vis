@@ -9,7 +9,7 @@
         {
             "identificator": 403,
             "status": true,
-            "titlu": "Acces interzis",
+            "titlu": "403-Acces interzis",
             "text": "Nu aveți permisiunea de a accesa această resursă.",
             "imagine": "eroare.png"
         },

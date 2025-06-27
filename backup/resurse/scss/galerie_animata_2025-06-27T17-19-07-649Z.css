@@ -1,0 +1,41 @@
+.galerie-animata {
+  display: none;
+}
+@media (min-width: 1200px) {
+  .galerie-animata {
+    display: block;
+    position: relative;
+    width: 80%;
+    margin: auto;
+    aspect-ratio: 16/9;
+    border: 20px solid;
+    border-image-source: url("../imagini/border.jpg");
+    border-image-slice: 30;
+    border-image-width: 20px;
+    border-image-repeat: stretch;
+    overflow: hidden;
+  }
+  .galerie-animata .slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    z-index: 1;
+    clip-path: ellipse(100% 0% at 50% 50%);
+    filter: grayscale(1);
+    transition: clip-path 2.5s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.8s, filter 1.5s;
+  }
+  .galerie-animata .slide.active {
+    opacity: 1;
+    z-index: 2;
+    clip-path: ellipse(100% 70% at 50% 50%);
+    filter: grayscale(0);
+  }
+  .galerie-animata:hover .slide.active {
+    animation-play-state: paused;
+  }
+}

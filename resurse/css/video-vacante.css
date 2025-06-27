@@ -22,27 +22,30 @@ video {
     height: auto; /* Permite redimensionarea proporțională */
 }
 
-/* Stilizarea textului din subtitrări - îmbunătățit pentru vizibilitate */
+//* Stil general pentru subtitrări */
 ::cue {
-    background-color: rgba(0, 0, 0, 0.7);
-    color: white;
+    background-color: white;         /* fundal alb */
+    color: #0a0c63;                     /* text închis la culoare */
     font-family: 'Montserrat', sans-serif;
-    font-size: 1em; /* Mărime redusă */
+    font-size: 1em;
     line-height: 1.4;
     padding: 4px 8px;
     border-radius: 4px;
+    text-align: center;
 }
 
-/* Poziționarea subtitrărilor */
-::cue(:bottom) {
-    bottom: 8%;
+/* Adaugă această regulă pentru a forța poziționarea sus */
+::cue(:top) {
+  position: absolute;  /* uneori necesar pentru a funcționa */
+  top: 5%;
 }
 
-/* Stilizare pentru textul bold din subtitrări */
-::cue(b) {
-    font-weight: bold;
-    color: #ffcc00; /* Culoare accentuată pentru textul bolduit */
+/* Stil doar pentru text italic */
+::cue(i) {
+    font-style: italic;
 }
+
+
 
 /* Adăugare hover effect pentru controlul video */
 video:hover {

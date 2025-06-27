@@ -185,53 +185,80 @@ console.log("Folderul proiectului: ", __dirname);
 console.log("Calea fisierului index.js: ", __filename);
 console.log("Folderul curent de lucru: ", process.cwd());
 
-// Function to compile SCSS to CSS with backup
+// Funcție asincronă pentru compilarea unui fișier SCSS într-un fișier CSS cu backup
 async function compileazaScss(caleScss, caleCss) {
+  // Verificăm dacă calea SCSS e absolută; dacă nu, o completăm cu folderul global pentru SCSS
   const scssAbs = path.isAbsolute(caleScss)
     ? caleScss
     : path.join(obiectGlobal.folderScss, caleScss);
 
+  // Verificăm dacă ne-a fost oferită o cale CSS; dacă nu, generăm automat una în folderul CSS
   const cssAbs = caleCss
     ? (path.isAbsolute(caleCss) ? caleCss : path.join(obiectGlobal.folderCss, caleCss))
     : path.join(obiectGlobal.folderCss, path.basename(scssAbs, ".scss") + ".css");
 
+  // Pregătim calea către folderul de backup unde vom salva versiunile vechi
   const backupPath = path.join(obiectGlobal.folderBackup, "resurse/scss");
+
+  // Creăm folderul de backup dacă nu există (recursive = creează și directoare intermediare)
   await fsp.mkdir(backupPath, { recursive: true });
 
   try {
+    // Dacă fișierul CSS există deja, îl copiem în backup înainte să-l rescriem
     if (fs.existsSync(cssAbs)) {
+      // Generăm un timestamp pentru numele fișierului de backup (fără caractere ilegale)
       const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+
+      // Obținem numele fișierului CSS fără extensie
       const numeFisier = path.basename(cssAbs, ".css");
+
+      // Cream calea completă către fișierul de backup cu timestamp
       const caleBackup = path.join(backupPath, `${numeFisier}_${timestamp}.css`);
+
+      // Copiem fișierul CSS actual în folderul de backup
       await fsp.copyFile(cssAbs, caleBackup);
     }
 
+    // Compilăm fișierul SCSS în CSS folosind biblioteca `sass`
     const rezultat = sass.compile(scssAbs, { style: "expanded" });
+
+    // Scriem CSS-ul generat în fișierul CSS de destinație
     await fsp.writeFile(cssAbs, rezultat.css);
+
+    // Afișăm în consolă confirmarea compilării
     console.log(`[SCSS] Compilat: ${scssAbs} -> ${cssAbs}`);
   } catch (err) {
+    // Dacă apare o eroare la compilare, o afișăm în consolă
     console.error(`[Eroare] La compilarea ${scssAbs}:`, err.message);
   }
 }
 
-// Compile all SCSS files
+// Funcție care compilează toate fișierele SCSS din folderul global definit
 function compileazaToateScss() {
+  // Citim toate fișierele din folderul SCSS și păstrăm doar cele care se termină în `.scss`
   const fisiere = fs.readdirSync(obiectGlobal.folderScss).filter(f => f.endsWith(".scss"));
+
+  // Pentru fiecare fișier, apelăm funcția de compilare
   for (let f of fisiere) {
     compileazaScss(f);
   }
 }
 
-// Initial compilation of all SCSS files
+// La rularea serverului, compilăm toate fișierele SCSS existente
 compileazaToateScss();
 
-// Watch SCSS folder for changes
+// Ascultăm modificările în folderul SCSS pentru a recompila automat fișierele afectate
 fs.watch(obiectGlobal.folderScss, (event, filename) => {
+  // Verificăm că fișierul modificat este un fișier SCSS valid
   if (filename && filename.endsWith(".scss")) {
+    // Afișăm ce fișier a fost modificat și ce tip de eveniment s-a produs (ex: change)
     console.log(`[SCSS] Detectat eveniment: ${event} pe ${filename}`);
+
+    // Recompilăm fișierul modificat
     compileazaScss(filename);
   }
 });
+
 
 // Function to initialize errors from JSON file
 function initErori() {
@@ -304,22 +331,54 @@ app.get(['/', '/index', '/home'], function (req, res) {
 });
 
 
-// Function to process images into "mic" folder only
+app.get("/galerie_animata", (req, res) => {
+  try {
+    // Citește fișierul JSON la fiecare request
+    const caleGalerieJson = path.join(__dirname, "resurse/json/galerie.json");
+    const jsonImagini = JSON.parse(fs.readFileSync(caleGalerieJson, "utf8"));
+
+    // Puteri ale lui 2 între 2 și 16
+    const puteri = [2, 4, 8, 16];
+    const imaginiPar = jsonImagini.imagini.filter((img, idx) => idx % 2 === 0);
+
+    // Filtrează puterile posibile în funcție de câte imagini ai
+    const puteriPosibile = puteri.filter(p => p <= imaginiPar.length);
+    const nrImagini = puteriPosibile[Math.floor(Math.random() * puteriPosibile.length)];
+
+    const imaginiSelectate = imaginiPar.slice(0, nrImagini);
+
+    res.render("pagini/galerie_animata", {
+      imaginiSelectate,
+      cale_galerie: jsonImagini.cale_galerie
+    });
+  } catch (err) {
+    console.error("Eroare la /galerie_animata:", err);
+    res.status(500).send("Eroare la încărcarea galeriei animate.");
+  }
+});
+
+
+
+// Funcție asincronă pentru inițializarea și procesarea imaginilor
 async function initGallery() {
-  // Read gallery JSON
+  // Creează calea absolută către fișierul galerie.json
   const galleryPath = path.join(__dirname, 'resurse/json/galerie.json');
+
+  // Citește conținutul fișierului JSON și îl parsează într-un obiect JavaScript
   const galleryData = JSON.parse(fs.readFileSync(galleryPath, 'utf8'));
 
-  // Validate JSON structure
+  // Verifică dacă structura JSON este validă (conține câmpurile așteptate)
   if (!galleryData?.cale_galerie || !Array.isArray(galleryData?.imagini)) {
-    throw new Error("Invalid gallery JSON structure");
+    throw new Error("Invalid gallery JSON structure"); // Aruncă eroare dacă structura e greșită
   }
 
-  // Prepare paths
+  // Creează calea absolută către folderul principal al galeriei
   const galerieFolder = path.join(__dirname, galleryData.cale_galerie);
+
+  // Creează calea absolută către subfolderul "mic" (unde se vor salva imaginile redimensionate)
   const smallFolder = path.join(galerieFolder, "mic");
 
-  // Create small folder ("mic") if it doesn't exist
+  // Verifică dacă folderul "mic" există, dacă nu, îl creează recursiv
   if (!fs.existsSync(smallFolder)) {
     fs.mkdirSync(smallFolder, { recursive: true });
     console.log("Created small folder:", smallFolder);
@@ -327,61 +386,81 @@ async function initGallery() {
     console.log("Small folder already exists:", smallFolder);
   }
 
-  // Simulăm data și ora pentru test
-  const currentDate = new Date("2025-05-12T08:50:00");
+  // Simulează o dată și oră curentă pentru testare (12 mai 2025, ora 08:10)
+  const currentDate = new Date("2025-05-12T08:10:00");
   console.log("Simulated current date:", currentDate);
 
+  // Obține minutul din ora simulată
   const currentMinutes = currentDate.getMinutes();
   console.log("Current minutes:", currentMinutes);
 
+  // Determină în care sfert de oră se află ora curentă
   let currentQuarter;
   if (currentMinutes < 15) {
-    currentQuarter = "1"; // între oră fixă și 15 minute
+    currentQuarter = "1"; // între minutul 0 și 14
   } else if (currentMinutes < 30) {
-    currentQuarter = "2"; // între 15 și 30 minute
+    currentQuarter = "2"; // între minutul 15 și 29
   } else if (currentMinutes < 45) {
-    currentQuarter = "3"; // între 30 și 45 minute
+    currentQuarter = "3"; // între minutul 30 și 44
   } else {
-    currentQuarter = "4"; // între 45 și 60 minute
+    currentQuarter = "4"; // între minutul 45 și 59
   }
   console.log("Determined current quarter:", currentQuarter);
 
-  // Process each image (resize to width 300px)
+  // Creează o listă pentru a stoca informațiile imaginilor procesate
   const processedImages = [];
+
+  // Pentru fiecare imagine din JSON, se pornește o funcție asincronă de procesare
   const promises = galleryData.imagini.map(async image => {
-                                                        if (!image?.cale_relativa) {
-                                                          console.warn("Skipping image - missing cale_relativa:", image);
-                                                          return;
-                                                        }
+    // Verifică dacă imaginea are o cale relativă validă
+    if (!image?.cale_relativa) {
+      console.warn("Skipping image - missing cale_relativa:", image);
+      return; // Sare peste imagine dacă nu are cale validă
+    }
 
-                                                        const [fileName, fileExt] = image.cale_relativa.split('.');
-                                                        const sourcePath = path.join(galerieFolder, image.cale_relativa);
-                                                        const targetPath = path.join(smallFolder, `${fileName}.webp`);
+    // Extrage numele fișierului și extensia prin separare la "."
+    const [fileName, fileExt] = image.cale_relativa.split('.');
 
-                                                        if (!fs.existsSync(sourcePath)) {
-                                                          console.warn("Source image not found:", sourcePath);
-                                                          return;
-                                                        }
+    // Creează calea completă către imaginea originală
+    const sourcePath = path.join(galerieFolder, image.cale_relativa);
 
-                                                        try {
-                                                          await sharp(sourcePath)
-                                                            .resize({ width: 300 })
-                                                            .webp()
-                                                            .toFile(targetPath);
+    // Creează calea completă unde se va salva imaginea procesată (.webp)
+    const targetPath = path.join(smallFolder, `${fileName}.webp`);
 
-                                                          console.log("Processed image:", image.cale_relativa);
+    // Verifică dacă fișierul sursă există efectiv pe disc
+    if (!fs.existsSync(sourcePath)) {
+      console.warn("Source image not found:", sourcePath);
+      return; // Dacă nu există, nu o procesează
+    }
 
-                                                          processedImages.push({
-                                                            ...image,
-                                                            fisier_mic: `/${galleryData.cale_galerie}/mic/${fileName}.webp`
-                                                          });
-                                                        } catch (err) {
-                                                          console.error(`Error processing image ${image.cale_relativa}:`, err);
-                                                        }
-                                                      });
+    // Încearcă procesarea imaginii (cu try/catch pentru protecție)
+    try {
+      // Folosește biblioteca `sharp` pentru a redimensiona și converti imaginea
+      await sharp(sourcePath)               // Deschide imaginea sursă
+        .resize({ width: 300 })             // Redimensionează la lățime 300px
+        .webp()                             // Convertește în format .webp
+        .toFile(targetPath);                // Salvează imaginea procesată la calea target
 
+      console.log("Processed image:", image.cale_relativa);
+
+      // Adaugă imaginea procesată în lista de rezultate
+      processedImages.push({
+        ...image,  // Copiază toate proprietățile originale
+        fisier_mic: `/${galleryData.cale_galerie}/mic/${fileName}.webp` // Adaugă calea către fișierul mic
+      });
+
+    } catch (err) {
+      // Afișează eroarea dacă procesarea imaginii eșuează
+      console.error(`Error processing image ${image.cale_relativa}:`, err);
+    }
+  });
+
+  // Așteaptă ca toate promisiunile (imagini procesate) să fie finalizate
   await Promise.all(promises);
+
+  // Afișează în consolă câte imagini au fost procesate cu succes
   console.log("Successfully processed", processedImages.length, "images");
+
 
   // Update the global object with processed images
   obGlobal.obImagini = {
@@ -503,21 +582,7 @@ app.use("/resurse", function(req, res, next) {
 }, express.static(path.join(__dirname, "resurse"))); // <--- important să fie PRIMUL
 
 // 2. Pagini dinamice .ejs
-app.get("*ejs", function(req, res) {
-  try {
-    res.render("pagini" + req.url, { ip: req.ip }, function(err, rezultatRandare) {
-      if (err) {
-        console.log("Eroare randare:", err);
-        afisareEroare(res, 400);
-      } else {
-        res.send(rezultatRandare);
-      }
-    });
-  } catch (errRandare) {
-    console.log("Eroare generală:", errRandare);
-    afisareEroare(res, 400);
-  }
-});
+
 
 // 3. Rută fallback pentru 404
 app.use((req, res) => {

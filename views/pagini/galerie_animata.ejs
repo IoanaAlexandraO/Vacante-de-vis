@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <%- include("../fragmente/head.ejs") %>
+    <link rel="stylesheet" href="/resurse/scss/galerie_animata.css">
+  <script src="/resurse/js/galerie_animata.js"></script>
+    <title>Galerie Animată</title>
+</head>
+<body>
+    <%- include("../fragmente/header.ejs") %>
+
+    <main>
+        <section>
+            <!-- Sunt alese <%= imaginiSelectate.length %> poze random, putere a lui 2, cu index par -->
+            <h2>Galerie Animată</h2>
+            <p>Imaginile se schimbă automat, din centru spre exterior.</p>
+
+            <div class="galerie-animata">
+  <% imaginiSelectate.forEach(function(img, i) { %>
+    <div class="slide <%= i === 0 ? 'active' : '' %>"
+         style="background-image: url('/<%= cale_galerie %>/<%= img.cale_relativa %>');">
+    </div>
+  <% }); %>
+</div>
+
+        </section>
+    </main>
+
+  
+    <%- include("../fragmente/footer.ejs") %>
+</body>
+</html>

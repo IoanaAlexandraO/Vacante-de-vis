@@ -29,7 +29,6 @@ nav ul.meniu {
 }
 @media (max-width: 1000px) {
   nav ul.meniu {
-    display: flex;
     flex-direction: column;
     align-items: center;
     opacity: 0;
@@ -64,6 +63,11 @@ nav ul.meniu li a {
   }
   nav ul.meniu li a::after {
     display: none !important;
+  }
+}
+@media (max-width: 1000px) {
+  nav ul.meniu li a {
+    font-size: small;
   }
 }
 @media (min-width: 1792px) {
@@ -115,11 +119,6 @@ nav ul.meniu li.has-submenu:hover > ul.submenu {
 @media (max-width: 1700px) {
   nav ul.meniu li .fas.fa-home:before {
     content: "\e1b0";
-    font-size: small;
-  }
-}
-@media (max-width: 1000px) {
-  nav ul.meniu li a {
     font-size: small;
   }
 }

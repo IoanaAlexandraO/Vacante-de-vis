@@ -1,0 +1,36 @@
+.galerie-animata {
+  position: relative;
+  width: 600px;
+  height: 400px;
+  overflow: hidden;
+}
+.galerie-animata .slide {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  object-fit: cover;
+  opacity: 0;
+  z-index: 1;
+  pointer-events: none;
+  transition: clip-path 2.5s cubic-bezier(0.77, 0, 0.175, 1), filter 2s cubic-bezier(0.77, 0, 0.175, 1), opacity 1s cubic-bezier(0.77, 0, 0.175, 1);
+  transition-play-state: running;
+  clip-path: ellipse(100% 0% at 50% 50%);
+  filter: grayscale(1);
+}
+.galerie-animata .slide.active {
+  opacity: 1;
+  z-index: 2;
+  pointer-events: auto;
+  clip-path: ellipse(100% 70% at 50% 50%);
+  filter: grayscale(0);
+}
+.galerie-animata .slide.out {
+  opacity: 0;
+  z-index: 1;
+  clip-path: ellipse(0% 0% at 50% 50%);
+}
+.galerie-animata:hover .slide {
+  transition-play-state: paused;
+}

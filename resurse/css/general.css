@@ -575,16 +575,22 @@
     margin-bottom: var(--space-sm);
   }
   
+/*video-uri*/
+  
   .container-iframe {
     text-align: center;
   }
   
-  .taburi-iframe {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    margin-bottom: 20px;
-  }
+
+  /*flex-orizontal*/
+ .taburi-iframe {
+  display: flex;
+  flex-direction: column;     
+  align-items: flex-start;    
+  gap: 10px;                 
+  margin: 0 auto 20px auto;   
+  width: fit-content;         
+
   
   .taburi-iframe a {
     padding: 10px 20px;
@@ -707,35 +713,39 @@
 
 
 
-  .button {
-    background-color: var(--primary-blue);
-    color: var(--white);
-    padding: var(--space-sm) var(--space-md);
-    border-radius: var(--border-radius-sm);
-    margin-top: var(--space-sm);
-    display: inline-block;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  .button:hover {
-    background-color: var(--hover-blue);
-  }
-  
-  .login-button {
-    background-color: var(--accent-blue);
-    color: var(--dark-blue);
-    padding: 10px 20px;
-    border: 2px solid var(--dark-blue);
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  .login-button:hover,
-  .login-button.active {
-    background-color: var(--dark-blue);
-    color: var(--accent-blue);
-  }
+ .button {
+  background-color: var(--primary-blue);
+  color: var(--white);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--border-radius-sm);
+  margin-top: var(--space-sm);
+  display: inline-block;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.button:hover {
+  background-color: var(--hover-blue);
+}
+
+.login-button {
+  background-color: var(--accent-blue);
+  color: var(--dark-blue);
+  padding: 10px 20px;
+  border: 2px solid var(--dark-blue);
+  cursor: pointer;
+  transition: background-color 0.3s;
+  text-align: left;
+  width: 100%;
+  max-width: 300px;
+}
+
+.login-button:hover,
+.login-button.active {
+  background-color: var(--dark-blue);
+  color: var(--accent-blue);
+}
+
   
   .form-group {
     margin-bottom: 15px;
@@ -794,16 +804,36 @@
   
  
 
+/* Implicit: bannerul e ascuns pe ecran */
+#banner {
+  display: none;
+}
 
-
-
-  #link-top-container {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    z-index: 1000;
+/* Doar la print: afișăm bannerul */
+@media print {
+  #banner {
+    display: block;
+    width: 80%;
+    margin: 0 auto;
+    border: 2px dotted black;
+    text-align: center;
+    font-size: 1.2em;
+    padding: 10px;
+    color: black;
+    font-weight: bold;
   }
-  
+}
+
+
+
+ #link-top-container {
+  position: fixed;
+  bottom: 80px; /
+  right: 30px;
+  z-index: 1000;
+}
+ /* cerc radius */
+
   #link-top {
     display: block;
     width: 60px;
@@ -817,6 +847,9 @@
     overflow: hidden;
   }
   
+
+  
+
   .link-top-circle {
     position: absolute;
     top: 0;
@@ -874,6 +907,8 @@
     opacity: 1;
   }
   
+
+
   #link-top:hover .link-top-circle {
     transform: rotate(360deg);
   }
@@ -882,6 +917,8 @@
     transform: rotate(0deg);
   }
   
+
+
   #link-top:hover .link-top-arrow {
     filter: blur(0);
     text-shadow: none;

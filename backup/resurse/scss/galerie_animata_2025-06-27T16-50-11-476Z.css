@@ -1,0 +1,24 @@
+.galerie-animata {
+  position: relative;
+  width: 100%;
+  max-width: 800px;
+  height: 400px;
+  margin: 2rem auto;
+  overflow: hidden;
+  background: #111;
+}
+.galerie-animata .slide {
+  background-size: cover;
+  background-position: center;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  clip-path: inset(50% 50% 50% 50%);
+  transition: clip-path 1s ease-in-out, opacity 0.8s;
+}
+@media (max-width: 992px) {
+  .galerie-animata {
+    display: none;
+  }
+}

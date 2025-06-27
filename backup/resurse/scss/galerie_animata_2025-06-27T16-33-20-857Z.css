@@ -1,0 +1,32 @@
+.galerie-animata {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  border: 12px solid transparent;
+  border-image: url("/resurse/imagini/border-galerie.png") 30 round;
+  padding: 2rem;
+  background: #222;
+  min-height: 400px;
+  position: relative;
+}
+.galerie-animata .slide {
+  width: 320px;
+  height: 220px;
+  background-size: cover;
+  background-position: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.5s;
+  clip-path: circle(0% at 50% 50%);
+  z-index: 1;
+}
+.galerie-animata .slide.active {
+  opacity: 1;
+  clip-path: circle(150% at 50% 50%);
+  z-index: 2;
+  transition: clip-path 1s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.5s;
+}
