@@ -117,7 +117,7 @@ document.addEventListener("DOMContentLoaded", function() {
       document.getElementById("modal-vacanta").style.display = "flex";
     });
   });
-
+// #inserez valoare src="${imagine}" calea catre imagine 
   // Închide la click pe X sau în afara modalului
   document.querySelector("#modal-vacanta .modal-close").onclick = function() {
     document.getElementById("modal-vacanta").style.display = "none";
@@ -148,105 +148,118 @@ document.addEventListener("DOMContentLoaded", function() {
   <h2 class="mb-3 text-dark-gray">Filtrare și sortare</h2>
   <div class="row g-3">
 
-    <!-- 1. Input text + datalist pentru autocomplete -->
-    <div class="col-md-4">
-      <label for="inp-nume" class="form-label"><i class="bi bi-search"></i> Caută după nume:</label>
-      <input type="text" id="inp-nume" class="form-control" list="lista-nume" placeholder="Numele vacanței">
-      <datalist id="lista-nume">
-        <% numeVacante.forEach(n => { %>
-          <option value="<%= n %>"></option>
-        <% }); %>
-      </datalist>
-    </div>
+<!-- 1. Input text + datalist pentru autocomplete după nume -->
+<div class="col-md-4"><!-- Coloană bootstrap de 4 unități -->
+  <!-- Etichetă asociată inputului de mai jos, include icon bootstrap -->
+  <label for="inp-nume" class="form-label">
+    <i class="bi bi-search"></i> Caută după nume:
+  </label>
 
-    <!-- 2. Range pentru preț -->
-    <div class="col-md-4">
-      <label for="inp-pret" class="form-label">Preț peste:</label>
-      <input type="range" id="inp-pret" class="form-range" min="<%= pretulMinim %>" max="<%= pretulMaxim %>" value="<%= pretulMinim %>">
-      <div class="d-flex justify-content-between">
-        <span id="min-pret"><%= pretulMinim %></span>
-        <span id="val-pret" class="fw-bold text-highlight-blue">(<%= pretulMinim %>)</span>
-        <span id="max-pret"><%= pretulMaxim %></span>
-      </div>
-    </div>
+  <!-- Input text cu id, clasa Bootstrap și listă asociată -->
+  <input type="text" id="inp-nume" class="form-control" list="lista-nume" placeholder="Numele vacanței">
 
-    <!-- 3. Select dificultate dinamic -->
-    <div class="col-md-4">
-      <label for="inp-dificultate" class="form-label">Dificultate:</label>
-      <select id="inp-dificultate" class="form-select">
-        <option value="oricare">Oricare</option>
-        <% dificultati.forEach(d => { %>
-          <option value="<%= d %>"><%= d.charAt(0).toUpperCase() + d.slice(1) %></option>
-        <% }); %>
-      </select>
-    </div>
+  <!-- Lista de sugestii care se autocompletează -->
+  <datalist id="lista-nume">
+    <% numeVacante.forEach(n => { %> <!-- Iterează toate numele din array-ul trimis din backend -->
+      <option value="<%= n %>"></option> <!-- Fiecare nume devine o opțiune autocomplete -->
+    <% }); %>
+  </datalist>
+</div>
 
-    <div class="col-md-4">
-      <label for="inp-culoare" class="form-label">Culoare pașaport:</label>
-      <select id="inp-culoare" class="form-select">
-        <option value="oricare">Oricare</option>
-        <option value="rosu">Roșu</option>
-        <option value="albastru">Albastru</option>
-        <option value="verde">Verde</option>
-        <option value="negru">Negru</option>
-      </select>
-    </div>
+<!-- 2. Range pentru preț (slider între min și max dinamic) -->
+<div class="col-md-4">
+  <label for="inp-pret" class="form-label">Preț peste:</label>
 
-    <!-- 4. Checkbox: transport inclus (static dar valid) -->
-    <div class="col-md-4 d-flex align-items-end">
-      <div class="btn-group" role="group" aria-label="Transport inclus">
-        <input type="checkbox" class="btn-check" id="inp-transport" autocomplete="off">
-        <label class="btn btn-outline-primary" for="inp-transport">Transport inclus</label>
-      </div>
-    </div>
+  <!-- Slider de tip range cu min/max dinamic -->
+  <input type="range" id="inp-pret" class="form-range"
+         min="<%= pretulMinim %>" max="<%= pretulMaxim %>" value="<%= pretulMinim %>">
 
-    <!-- 5. Number (durata), cu min/max dinamic -->
-    <div class="col-md-4">
-      <label for="inp-durata" class="form-label">Durată maximă (zile):</label>
-      <input type="number" id="inp-durata" class="form-control"
-             min="<%= durataMin %>" max="<%= durataMax %>" value="<%= durataMax %>">
-    </div>
-
-    <!-- 6. Date (disponibil după), cu min -->
-    <div class="col-md-4">
-      <label for="inp-data" class="form-label">Disponibil după:</label>
-      <input type="date" id="inp-data" class="form-control"
-             min="<%= dataMin %>">
-    </div>
-
-    <!-- 7. Textarea + datalist pentru activități -->
-    <div class="col-md-8 form-floating">
-      <textarea class="form-control" placeholder="Activități..." id="inp-activitati" list="lista-activitati" style="height: 100px"></textarea>
-      <label for="inp-activitati">Activități (cuvinte cheie)</label>
-      <datalist id="lista-activitati">
-        <% activitati.forEach(act => { %>
-          <option value="<%= act %>"></option>
-        <% }); %>
-      </datalist>
-    </div>
-
-    <!-- 8. Radio buttons pentru categorii -->
-    <div class="col-12">
-      Categorie:
-      <div class="d-flex flex-wrap gap-3">
-        <% categoriiRadio.forEach(cat => { %>
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="categorie" id="cat-<%= cat %>" value="<%= cat %>">
-            <label class="form-check-label" for="cat-<%= cat %>">
-              <%= cat.charAt(0).toUpperCase() + cat.slice(1) %>
-            </label>
-          </div>
-        <% }); %>
-      </div>
-    </div>
-
+  <!-- Afișare valori min, valoare curentă și max (Bootstrap flex) -->
+  <div class="d-flex justify-content-between">
+    <span id="min-pret"><%= pretulMinim %></span>
+    <span id="val-pret" class="fw-bold text-highlight-blue">(<%= pretulMinim %>)</span>
+    <span id="max-pret"><%= pretulMaxim %></span>
   </div>
+</div>
+
+<!-- 3. Select pentru dificultate, generat dinamic -->
+<div class="col-md-4">
+  <label for="inp-dificultate" class="form-label">Dificultate:</label>
+  <select id="inp-dificultate" class="form-select">
+    <option value="oricare">Oricare</option> <!-- Opțiune default -->
+    <% dificultati.forEach(d => { %> <!-- Generează fiecare dificultate -->
+      <option value="<%= d %>"><%= d.charAt(0).toUpperCase() + d.slice(1) %></option>
+    <% }); %>
+  </select>
+</div>
+
+<!-- 4. Select fix pentru culoarea pașaportului -->
+<div class="col-md-4">
+  <label for="inp-culoare" class="form-label">Culoare pașaport:</label>
+  <select id="inp-culoare" class="form-select">
+    <option value="oricare">Oricare</option>
+    <option value="rosu">Roșu</option>
+    <option value="albastru">Albastru</option>
+    <option value="verde">Verde</option>
+    <option value="negru">Negru</option>
+  </select>
+</div>
+
+<!-- 5. Checkbox pentru transport inclus (stil Bootstrap) -->
+<div class="col-md-4 d-flex align-items-end"><!-- Așezare jos în coloană -->
+  <div class="btn-group" role="group" aria-label="Transport inclus">
+    <!-- Checkbox Bootstrap (btn-check + label personalizat) -->
+    <input type="checkbox" class="btn-check" id="inp-transport" autocomplete="off">
+    <label class="btn btn-outline-primary" for="inp-transport">Transport inclus</label>
+  </div>
+</div>
+
+<!-- 6. Input number pentru durata, cu limitări dinamice -->
+<div class="col-md-4">
+  <label for="inp-durata" class="form-label">Durată maximă (zile):</label>
+  <input type="number" id="inp-durata" class="form-control"
+         min="<%= durataMin %>" max="<%= durataMax %>" value="<%= durataMax %>">
+</div>
+
+<!-- 7. Input de tip dată, cu valoare minimă dinamică -->
+<div class="col-md-4">
+  <label for="inp-data" class="form-label">Disponibil după:</label>
+  <input type="date" id="inp-data" class="form-control"
+         min="<%= dataMin %>">
+</div>
+
+<!-- 8. Textarea pentru activități + datalist (autocomplete) -->
+<div class="col-md-8 form-floating">
+  <textarea class="form-control" placeholder="Activități..." id="inp-activitati" list="lista-activitati" style="height: 100px"></textarea>
+  <label for="inp-activitati">Activități (cuvinte cheie)</label>
+  <datalist id="lista-activitati">
+    <% activitati.forEach(act => { %>
+      <option value="<%= act %>"></option>
+    <% }); %>
+  </datalist>
+</div>
+
+<!-- 9. Radio buttons pentru categorii, generate dinamic -->
+<div class="col-12">
+  Categorie:
+  <div class="d-flex flex-wrap gap-3">
+    <% categoriiRadio.forEach(cat => { %> <!-- Iterează fiecare categorie -->
+      <div class="form-check">
+        <!-- Radio cu același nume pentru grupare -->
+        <input class="form-check-input" type="radio" name="categorie" id="cat-<%= cat %>" value="<%= cat %>">
+        <label class="form-check-label" for="cat-<%= cat %>">
+          <%= cat.charAt(0).toUpperCase() + cat.slice(1) %> <!-- Nume cu majusculă -->
+        </label>
+      </div>
+    <% }); %>
+  </div>
+</div>
 
   <div class="mt-4 d-flex gap-3 flex-wrap">
     <button id="btn-filtrare" class="btn btn-primary"><i class="bi bi-funnel-fill me-1"></i><span class="d-none d-sm-inline">Filtrează</span></button>
     <button id="btn-sortare-pret" class="btn btn-outline-secondary"><i class="bi bi-arrow-down-up me-1"></i><span class="d-none d-sm-inline">Sortare după preț crescator</span></button>
     <button id="btn-sortare-pret-desc" class="btn btn-outline-secondary"><i class="bi bi-arrow-down-up me-1"></i><span class="d-none d-sm-inline">Sortare după preț descrescator </span></button>
-
+<button id="btn-calcul-suma" class="btn btn-info">Calculează suma prețurilor afișate</button>
     <button id="btn-resetare" class="btn btn-danger"><i class="bi bi-x-circle me-1"></i><span class="d-none d-sm-inline">Resetare</span></button>
   </div>
 </section>
@@ -263,6 +276,7 @@ document.addEventListener("DOMContentLoaded", function() {
           data-transport="<%= v.transport_inclus ? 'da' : 'nu' %>"
           data-durata="<%= v.durata_zile %>"
           data-categorie="<%= v.categorie %>"
+          data-subcategorie="<%= v.subcategorie %>"
           data-disponibilitate="<%= v.data_disponibilitate %>"
           data-nume="<%= v.nume.toLowerCase() %>"
           data-pret="<%= v.pret %>"

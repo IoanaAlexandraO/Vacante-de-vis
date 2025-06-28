@@ -74,6 +74,7 @@ app.get("/seturi", async (req, res) => {
         JOIN asociere_set a ON v.id = a.id_produs
         WHERE a.id_set = $1
       `, [set.id]);
+//  $1 este un placeholder parametrizat (protecție anti-SQL injection). Valoarea reală vine din array-ul [set.id].
 
       set.vacante = vacante;
 
@@ -448,6 +449,26 @@ app.get("/galerie_animata", (req, res) => {
   }
 });
 
+// Middleware to add IP to locals
+app.use(function (req, res, next) {
+  res.locals.ip = req.ip;
+  next();
+});
+
+// Serve static files from the 'resurse' directory with directory checks
+
+
+
+// Route for home page (multiple path variants) with gallery data
+app.get(['/', '/index', '/home'], function (req, res) {
+  const ip = req.ip;
+
+  res.render("pagini/index", {
+    ip: ip,
+    imagini: obGlobal.obImagini.imagini,
+    cale_galerie: obGlobal.obImagini.cale_galerie // ✅ acum e inclusă
+  });
+});
 
 
 // Funcție asincronă 
@@ -561,6 +582,23 @@ async function initGallery() {
 
   return processedImages;
 }
+// 1. Servește resursele statice PRIMELE
+app.use("/resurse", function(req, res, next) {
+  const fullPath = path.join(__dirname, "resurse", req.url);
+
+  try {
+    if (fs.existsSync(fullPath) && fs.statSync(fullPath).isDirectory()) {
+      if (!req.url.endsWith("/")) {
+        afisareEroare(res, 403, "Acces interzis", "Adaugă / la finalul directorului.");
+        return;
+      }
+    }
+  } catch (err) {
+    console.error("Eroare verificare folder:", err);
+  }
+
+  next();
+}, express.static(path.join(__dirname, "resurse"))); // <--- important să fie PRIMUL
 
 app.post("/inregistrare",function(req, res){
     var username;
@@ -672,7 +710,21 @@ app.use("/resurse", function(req, res, next) {
 }, express.static(path.join(__dirname, "resurse"))); // <--- important să fie PRIMUL
 
 // 2. Pagini dinamice .ejs
-
+app.get("*ejs", function(req, res) {
+  try {
+    res.render("pagini" + req.url, { ip: req.ip }, function(err, rezultatRandare) {
+      if (err) {
+        console.log("Eroare randare:", err);
+        afisareEroare(res, 400);
+      } else {
+        res.send(rezultatRandare);
+      }
+    });
+  } catch (errRandare) {
+    console.log("Eroare generală:", errRandare);
+    afisareEroare(res, 400);
+  }
+});
 
 // 3. Rută fallback pentru 404
 app.use((req, res) => {

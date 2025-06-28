@@ -1,228 +1,189 @@
-/*
+// Importăm din pachetul 'pg' clasele Client și Pool
+// 'Client' se folosește pentru conexiune simplă la baza de date PostgreSQL
+const {Client, Pool} = require("pg");
 
-ATENTIE!
-inca nu am implementat protectia contra SQL injection
-*/
+// Definim clasa AccesBD care se ocupă de conexiunea și interacțiunea cu baza de date
+class AccesBD {
+    // Variabile private statice pentru Singleton
+    static #instanta = null;        // va ține instanța unică a clasei
+    static #initializat = false;    // verifică dacă e pregătită să creeze instanța
 
-const {Client, Pool}=require("pg");
-
-
-class AccesBD{
-    static #instanta=null;
-    static #initializat=false;
-
+    // Constructorul clasei
     constructor() {
-        if(AccesBD.#instanta){
+        // Dacă deja există o instanță, nu permite crearea altei instanțe
+        if (AccesBD.#instanta) {
             throw new Error("Deja a fost instantiat");
         }
-        else if(!AccesBD.#initializat){
+        // Dacă nu s-a făcut inițializarea (nu s-a apelat corect prin getInstanta), dă eroare
+        else if (!AccesBD.#initializat) {
             throw new Error("Trebuie apelat doar din getInstanta; fara sa fi aruncat vreo eroare");
         }
     }
 
-    initLocal(){
-        this.client= new Client({database:"proiect_bd",
-            user:"alexandra", 
-            password:"Alexandra8", 
-            host:"localhost", 
-            port:5432});
-        // this.client2= new Pool({database:"laborator",
-        //         user:"irina", 
-        //         password:"irina", 
-        //         host:"localhost", 
-        //         port:5432});
+    // Inițializează conexiunea locală la baza de date
+    initLocal() {
+        // Creează un client PostgreSQL conectat la baza 'proiect_bd'
+        this.client = new Client({
+            database: "proiect_bd",
+            user: "alexandra",
+            password: "Alexandra8",
+            host: "localhost",
+            port: 5432
+        });
+
+        // Face efectiv conectarea
         this.client.connect();
     }
 
-    getClient(){
-        if(!AccesBD.#instanta ){
+    // Returnează clientul activ de conectare
+    getClient() {
+        // Dacă nu s-a creat instanța, aruncă eroare
+        if (!AccesBD.#instanta) {
             throw new Error("Nu a fost instantiata clasa");
         }
+        // Altfel, returnează clientul conectat
         return this.client;
     }
 
+    // === DOC TIP DEFINIT (JSdoc) ===
     /**
-     * @typedef {object} ObiectConexiune - obiect primit de functiile care realizeaza un query
-     * @property {string} init - tipul de conexiune ("init", "render" etc.)
-     * 
-     * /
-
-    /**
-     * Returneaza instanta unica a clasei
-     *
-     * @param {ObiectConexiune} init - un obiect cu datele pentru query
-     * @returns {AccesBD}
+     * Returnează instanța unică a clasei AccesBD
+     * Poate primi opțional tipul de inițializare (ex: 'local')
      */
-    static getInstanta({init="local"}={}){
-        console.log(this);//this-ul e clasa nu instanta pt ca metoda statica
-        if(!this.#instanta){
-            this.#initializat=true;
-            this.#instanta=new AccesBD();
+    static getInstanta({init = "local"} = {}) {
+        console.log(this); // aici 'this' este clasa, nu o instanță
 
-            //initializarea poate arunca erori
-            //vom adauga aici cazurile de initializare 
-            //pentru baza de date cu care vrem sa lucram
-            try{
-                switch(init){
-                    case "local":this.#instanta.initLocal();
+        // Dacă nu s-a creat încă instanța, o creăm
+        if (!this.#instanta) {
+            this.#initializat = true;
+            this.#instanta = new AccesBD();
+
+            // Încearcă inițializarea clientului în funcție de tipul primit
+            try {
+                switch (init) {
+                    case "local":
+                        this.#instanta.initLocal();
                 }
-                //daca ajunge aici inseamna ca nu s-a produs eroare la initializare
-                
-            }
-            catch (e){
+            } catch (e) {
                 console.error("Eroare la initializarea bazei de date!");
             }
-
         }
+
+        // Returnează instanța unică
         return this.#instanta;
     }
 
-
-
-
     /**
-     * @typedef {object} ObiectQuerySelect - obiect primit de functiile care realizeaza un query
-     * @property {string} tabel - numele tabelului
-     * @property {string []} campuri - o lista de stringuri cu numele coloanelor afectate de query; poate cuprinde si elementul "*"
-     * @property {string[]} conditiiAnd - lista de stringuri cu conditii pentru where
+     * Selectează date din baza de date
+     * @param {object} obj Obiect care conține tabelul, coloanele și condițiile
+     * @param {function} callback Funcție care primește rezultatul sau eroarea
+     * @param {Array} parametriQuery Lista de valori pentru query parametrizat (opțional)
      */
+    select({tabel = "", campuri = [], conditiiAnd = []} = {}, callback, parametriQuery = []) {
+        // Creează clauza WHERE dacă avem condiții
+        let conditieWhere = "";
+        if (conditiiAnd.length > 0)
+            conditieWhere = `where ${conditiiAnd.join(" and ")}`;
 
+        // Creează comanda SQL de tip SELECT
+        let comanda = `select ${campuri.join(",")} from ${tabel} ${conditieWhere}`;
+        console.error(comanda); // o afișăm pentru debugging
 
-    
-    /**
-     * callback pentru queryuri.
-     * @callback QueryCallBack
-     * @param {Error} err Eventuala eroare in urma queryului
-     * @param {Object} rez Rezultatul query-ului
-     */
-    /**
-     * Selecteaza inregistrari din baza de date
-     *
-     * @param {ObiectQuerySelect} obj - un obiect cu datele pentru query
-     * @param {QueryCallBack} callback - o functie callback cu 2 parametri: eroare si rezultatul queryului
-     */
-    select({tabel="",campuri=[],conditiiAnd=[]} = {}, callback, parametriQuery=[]){
-        let conditieWhere="";
-        if(conditiiAnd.length>0)
-            conditieWhere=`where ${conditiiAnd.join(" and ")}`; 
-        let comanda=`select ${campuri.join(",")} from ${tabel} ${conditieWhere}`;
-        console.error(comanda);
-        /*
-        comanda=`select id, camp1, camp2 from tabel where camp1=$1 and camp2=$2;
-        this.client.query(comanda,[val1, val2],callback)
-
-        */
-        this.client.query(comanda,parametriQuery, callback)
+        // Execută comanda
+        this.client.query(comanda, parametriQuery, callback);
     }
 
+    // Versiune async (cu await) a metodei SELECT
+    async selectAsync({tabel = "", campuri = [], conditiiAnd = []} = {}) {
+        let conditieWhere = "";
+        if (conditiiAnd.length > 0)
+            conditieWhere = `where ${conditiiAnd.join(" and ")}`;
 
-    
-    async selectAsync({tabel="",campuri=[],conditiiAnd=[]} = {}){
-        let conditieWhere="";
-        if(conditiiAnd.length>0)
-            conditieWhere=`where ${conditiiAnd.join(" and ")}`;
-        
-        let comanda=`select ${campuri.join(",")} from ${tabel} ${conditieWhere}`;
-        console.error("selectAsync:",comanda);
-        try{
-            let rez=await this.client.query(comanda);
-            console.log("selectasync: ",rez);
+        let comanda = `select ${campuri.join(",")} from ${tabel} ${conditieWhere}`;
+        console.error("selectAsync:", comanda);
+
+        try {
+            // Execută comanda și așteaptă rezultatul
+            let rez = await this.client.query(comanda);
+            console.log("selectasync: ", rez);
             return rez;
-        }
-        catch (e){
+        } catch (e) {
             console.log(e);
             return null;
         }
     }
-    insert({tabel="",campuri={}} = {}, callback){
-                /*
-        campuri={
-            nume:"savarina",
-            pret: 10,
-            calorii:500
-        }
-        */
-        console.log("-------------------------------------------")
+
+    // Inserează o înregistrare în baza de date
+    insert({tabel = "", campuri = {}} = {}, callback) {
+        console.log("-------------------------------------------");
+        // Afișează cheile și valorile primite
         console.log(Object.keys(campuri).join(","));
         console.log(Object.values(campuri).join(","));
-        let comanda=`insert into ${tabel}(${Object.keys(campuri).join(",")}) values ( ${Object.values(campuri).map((x) => `'${x}'`).join(",")})`;
+
+        // Creează comanda SQL INSERT
+        let comanda = `insert into ${tabel}(${Object.keys(campuri).join(",")}) values (${Object.values(campuri).map((x) => `'${x}'`).join(",")})`;
         console.log(comanda);
-        this.client.query(comanda,callback)
+
+        // Execută comanda
+        this.client.query(comanda, callback);
     }
 
-     /**
-     * @typedef {object} ObiectQuerySelect - obiect primit de functiile care realizeaza un query
-     * @property {string} tabel - numele tabelului
-     * @property {string []} campuri - o lista de stringuri cu numele coloanelor afectate de query; poate cuprinde si elementul "*"
-     * @property {string[]} conditiiAnd - lista de stringuri cu conditii pentru where
-     */   
-    // update({tabel="",campuri=[],valori=[], conditiiAnd=[]} = {}, callback, parametriQuery){
-    //     if(campuri.length!=valori.length)
-    //         throw new Error("Numarul de campuri difera de nr de valori")
-    //     let campuriActualizate=[];
-    //     for(let i=0;i<campuri.length;i++)
-    //         campuriActualizate.push(`${campuri[i]}='${valori[i]}'`);
-    //     let conditieWhere="";
-    //     if(conditiiAnd.length>0)
-    //         conditieWhere=`where ${conditiiAnd.join(" and ")}`;
-    //     let comanda=`update ${tabel} set ${campuriActualizate.join(", ")}  ${conditieWhere}`;
-    //     console.log(comanda);
-    //     this.client.query(comanda,callback)
-    // }
-
-    update({tabel="",campuri={}, conditiiAnd=[]} = {}, callback, parametriQuery){
-        let campuriActualizate=[];
-        for(let prop in campuri)
+    // Actualizează o înregistrare (versiune simplă, nu parametrizată)
+    update({tabel = "", campuri = {}, conditiiAnd = []} = {}, callback, parametriQuery) {
+        let campuriActualizate = [];
+        for (let prop in campuri)
             campuriActualizate.push(`${prop}='${campuri[prop]}'`);
-        let conditieWhere="";
-        if(conditiiAnd.length>0)
-            conditieWhere=`where ${conditiiAnd.join(" and ")}`;
-        let comanda=`update ${tabel} set ${campuriActualizate.join(", ")}  ${conditieWhere}`;
+
+        let conditieWhere = "";
+        if (conditiiAnd.length > 0)
+            conditieWhere = `where ${conditiiAnd.join(" and ")}`;
+
+        let comanda = `update ${tabel} set ${campuriActualizate.join(", ")} ${conditieWhere}`;
         console.log(comanda);
-        this.client.query(comanda,callback)
+
+        // Execută comanda
+        this.client.query(comanda, callback);
     }
 
-    updateParametrizat({tabel="",campuri=[],valori=[], conditiiAnd=[]} = {}, callback, parametriQuery){
-        if(campuri.length!=valori.length)
-            throw new Error("Numarul de campuri difera de nr de valori")
-        let campuriActualizate=[];
-        for(let i=0;i<campuri.length;i++)
-            campuriActualizate.push(`${campuri[i]}=$${i+1}`);
-        let conditieWhere="";
-        if(conditiiAnd.length>0)
-            conditieWhere=`where ${conditiiAnd.join(" and ")}`;
-        let comanda=`update ${tabel} set ${campuriActualizate.join(", ")}  ${conditieWhere}`;
-        console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1111",comanda);
-        this.client.query(comanda,valori, callback)
+    // Actualizează o înregistrare (versiune parametrizată)
+    updateParametrizat({tabel = "", campuri = [], valori = [], conditiiAnd = []} = {}, callback, parametriQuery) {
+        // Verifică dacă avem același număr de câmpuri și valori
+        if (campuri.length != valori.length)
+            throw new Error("Numarul de campuri difera de nr de valori");
+
+        // Creează expresiile de tip camp=$1, camp2=$2 etc.
+        let campuriActualizate = [];
+        for (let i = 0; i < campuri.length; i++)
+            campuriActualizate.push(`${campuri[i]}=$${i + 1}`);
+
+        let conditieWhere = "";
+        if (conditiiAnd.length > 0)
+            conditieWhere = `where ${conditiiAnd.join(" and ")}`;
+
+        let comanda = `update ${tabel} set ${campuriActualizate.join(", ")} ${conditieWhere}`;
+        console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1111", comanda);
+
+        // Execută comanda cu valori parametrizate
+        this.client.query(comanda, valori, callback);
     }
 
+    // Șterge înregistrări din baza de date
+    delete({tabel = "", conditiiAnd = []} = {}, callback) {
+        let conditieWhere = "";
+        if (conditiiAnd.length > 0)
+            conditieWhere = `where ${conditiiAnd.join(" and ")}`;
 
-    //TO DO
-    // updateParametrizat({tabel="",campuri={}, conditiiAnd=[]} = {}, callback, parametriQuery){
-    //     let campuriActualizate=[];
-    //     for(let prop in campuri)
-    //         campuriActualizate.push(`${prop}='${campuri[prop]}'`);
-    //     let conditieWhere="";
-    //     if(conditiiAnd.length>0)
-    //         conditieWhere=`where ${conditiiAnd.join(" and ")}`;
-    //     let comanda=`update ${tabel} set ${campuriActualizate.join(", ")}  ${conditieWhere}`;
-    //     this.client.query(comanda,valori, callback)
-    // }
-
-    delete({tabel="",conditiiAnd=[]} = {}, callback){
-        let conditieWhere="";
-        if(conditiiAnd.length>0)
-            conditieWhere=`where ${conditiiAnd.join(" and ")}`;
-        
-        let comanda=`delete from ${tabel} ${conditieWhere}`;
+        let comanda = `delete from ${tabel} ${conditieWhere}`;
         console.log(comanda);
-        this.client.query(comanda,callback)
+
+        this.client.query(comanda, callback);
     }
 
-    query(comanda, callback){
-        this.client.query(comanda,callback);
+    // Execută un query SQL simplu (orice fel de comandă)
+    query(comanda, callback) {
+        this.client.query(comanda, callback);
     }
-
 }
 
-module.exports=AccesBD;
+// Exportă clasa pentru a putea fi folosită în alte fișiere
+module.exports = AccesBD;
