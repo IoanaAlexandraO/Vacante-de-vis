@@ -7,7 +7,9 @@
     <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
     <!-- Stiluri specifice paginii de vacanță -->
     <link rel="stylesheet" href="/resurse/css/vacanta.css">
-    <script src="/resurse/js/tema.js" defer></script>
+    <script src="/resurse/js/comparare.js" defer></script>
+   
+
 </head>
 
 <body>
@@ -72,6 +74,9 @@
     </article>
   <% }) %>
 <% } %>
+<button class="btn-compare" data-id="<%= vac.id %>" data-nume="<%= vac.nume %>" data-pret="<%= vac.pret %>">
+    Compară
+</button>
 
 
                       <button class="btn btn-primary">Rezervă acum</button>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ro">
+
+<head>
+    <%- include("../fragmente/head.ejs") %>
+        <link rel="stylesheet" type="text/css" href="/resurse/css/eroare.css">
+        <link rel="stylesheet" type="text/css" href="/resurse/css/general.css">
+        <link rel="stylesheet" type="text/css" href="/resurse/css/nav.css">
+        <title>Videoclipuri recomandare - Vacante de vis</title>
+        <link rel="stylesheet" type="text/css" href="/resurse/css/video-vacante.css">
+         <style>
+        .comparare-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 2rem;
+        }
+
+        .vacanta-box {
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            padding: 1.5rem;
+            background: #fdfdfd;
+        }
+
+        .vacanta-box h2 {
+            margin-top: 0;
+        }
+
+        .vacanta-box img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        .atribut-label {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .atribut {
+            margin-bottom: 0.8rem;
+        }
+    </style>
+</head>
+
+<body>
+    <%- include("../fragmente/header.ejs") %>
+
+    <h1 style="text-align: center;">Comparare Vacanțe</h1>
+
+    <div class="comparare-container">
+        <% [vacanta1, vacanta2].forEach(function(vacanta) { %>
+            <div class="vacanta-box">
+                <h2><%= vacanta.nume %></h2>
+
+                <% if (vacanta.imagine) { %>
+                    <img src="/resurse/imagini/vacante/<%= vacanta.imagine %>" alt="Imagine vacanță">
+                <% } %>
+
+                <div class="atribut"><span class="atribut-label">Descriere:</span> <%= vacanta.descriere %></div>
+                <div class="atribut"><span class="atribut-label">Categorie:</span> <%= vacanta.categorie %></div>
+                <div class="atribut"><span class="atribut-label">Dificultate:</span> <%= vacanta.dificultate %></div>
+                <div class="atribut"><span class="atribut-label">Preț:</span> <%= vacanta.pret %> €</div>
+                <div class="atribut"><span class="atribut-label">Durată:</span> <%= vacanta.durata_zile %> zile</div>
+                <div class="atribut"><span class="atribut-label">Dată disponibilitate:</span> <%= vacanta.data_disponibilitate.toLocaleDateString("ro-RO") %></div>
+                <div class="atribut"><span class="atribut-label">Pașaport necesar:</span> <%= vacanta.pasaport_necesar %></div>
+                <div class="atribut"><span class="atribut-label">Transport inclus:</span> <%= vacanta.transport_inclus ? "Da" : "Nu" %></div>
+                
+                <div class="atribut">
+                    <span class="atribut-label">Activități:</span>
+                    <ul>
+                        <% vacanta.activitati.forEach(function(act) { %>
+                            <li><%= act %></li>
+                        <% }); %>
+                    </ul>
+                </div>
+            </div>
+        <% }); %>
+    </div>
+</body>
+</html>
