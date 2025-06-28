@@ -73,3 +73,44 @@
 #btn-rezerva:hover {
   background-color: var(--hover-blue);
 }
+
+.badge.bg-warning {
+  animation: pulse 1.2s infinite alternate;
+  font-weight: bold;
+}
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 #ffc10788; }
+  100% { box-shadow: 0 0 10px 6px #ffc10744; }
+}
+
+
+.modal-vacanta-overlay {
+  position: fixed;
+  z-index: 9999;
+  left: 0; top: 0; width: 100vw; height: 100vh;
+  background: rgba(30, 60, 120, 0.35);
+  display: flex; align-items: center; justify-content: center;
+}
+.modal-vacanta-content {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px #123a7a44;
+  padding: 2rem;
+  max-width: 500px;
+  width: 95vw;
+  position: relative;
+  color: #1a2a4a;
+  border: 3px solid #0d6efd;
+}
+.modal-close {
+  position: absolute;
+  top: 0.5rem; right: 0.7rem;
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: #0d6efd;
+  cursor: pointer;
+}
+@media (max-width: 600px) {
+  .modal-vacanta-content { padding: 1rem; }
+}

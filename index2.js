@@ -136,6 +136,19 @@ app.get("/vacante", async (req, res) => {
     const { rows: vacante } = await client.query("SELECT * FROM vacante ORDER BY data_disponibilitate DESC");
     const categorie_selectata = req.query.categorie || "toate";
 
+    // === Interogare pentru cel mai ieftin produs din fiecare categorie ===
+    const { rows: minime } = await client.query(`
+      SELECT categorie, MIN(pret) AS pret_minim
+      FROM vacante
+      GROUP BY categorie
+    `);
+
+    // Convertim în obiect de tip { [categorie]: pret_minim }
+    const minPeCategorie = {};
+    for (let row of minime) {
+      minPeCategorie[row.categorie] = parseFloat(row.pret_minim);
+    }
+
     // === Prelucrări pentru cele 8 tipuri de input ===
     let pretulMinim = 300, pretulMaxim = 1200;
     let durataMin = null, durataMax = null;
@@ -146,7 +159,7 @@ app.get("/vacante", async (req, res) => {
     const categoriiSet = new Set();
 
     for (let vac of vacante) {
-      pret = parseInt(vac.pret);
+      let pret = parseInt(vac.pret);
       if (pretulMinim === null || pret < pretulMinim) pretulMinim = pret;
       if (pretulMaxim === null || pret > pretulMaxim) pretulMaxim = pret;
 
@@ -173,7 +186,8 @@ app.get("/vacante", async (req, res) => {
       dificultati: Array.from(dificultatiSet),
       activitati: Array.from(activitatiSet),
       numeVacante: Array.from(numeSet),
-      categoriiRadio: Array.from(categoriiSet)
+      categoriiRadio: Array.from(categoriiSet),
+      minPeCategorie // ✅ nou obiect trimis către EJS
     });
   } catch (err) {
     console.error("Eroare la extragerea vacanțelor:", err);

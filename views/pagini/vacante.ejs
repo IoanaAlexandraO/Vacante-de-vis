@@ -82,6 +82,51 @@
     
     /* .card-essential-info { Informațiile esențiale rămân vizibile } */
   </style>
+
+  <script>
+document.addEventListener("DOMContentLoaded", function() {
+  // Selectează toate cardurile de vacanță
+  document.querySelectorAll("#vacante-container article.card").forEach(card => {
+    card.addEventListener("click", function(e) {
+      // Nu deschide modalul dacă s-a dat click pe un buton din card
+      if (e.target.closest("button, a")) return;
+
+      // Ia datele din atributele data-*
+      const nume = card.querySelector(".card-title")?.textContent || "";
+      const pret = card.dataset.pret;
+      const categorie = card.dataset.categorie;
+      const dificultate = card.dataset.dificultate;
+      const durata = card.dataset.durata;
+      const data = card.dataset.disponibilitate;
+      const activitati = card.dataset.activitati;
+      const imagine = card.querySelector("img")?.src;
+
+      // Populează modalul
+      document.getElementById("modal-vacanta-body").innerHTML = `
+        <h3>${nume}</h3>
+        <img src="${imagine}" alt="${nume}" style="max-width:100%;border-radius:10px;margin-bottom:1rem;">
+        <ul class="list-group mb-2">
+          <li class="list-group-item"><strong>Preț:</strong> ${pret} €</li>
+          <li class="list-group-item"><strong>Categorie:</strong> ${categorie}</li>
+          <li class="list-group-item"><strong>Dificultate:</strong> ${dificultate}</li>
+          <li class="list-group-item"><strong>Durată:</strong> ${durata} zile</li>
+          <li class="list-group-item"><strong>Disponibilă din:</strong> ${data}</li>
+          <li class="list-group-item"><strong>Activități:</strong> ${activitati}</li>
+        </ul>
+      `;
+      document.getElementById("modal-vacanta").style.display = "flex";
+    });
+  });
+
+  // Închide la click pe X sau în afara modalului
+  document.querySelector("#modal-vacanta .modal-close").onclick = function() {
+    document.getElementById("modal-vacanta").style.display = "none";
+  };
+  document.getElementById("modal-vacanta").addEventListener("click", function(e) {
+    if (e.target === this) this.style.display = "none";
+  });
+});
+</script>
 </head>
 <body>
   <%- include("../fragmente/header") %>
@@ -226,11 +271,15 @@
           <div class="card-body d-flex flex-column bg-white text-dark">
             <h5 class="card-title text-dark-gray"><%= v.nume %></h5>
             <p class="card-text"><strong>Preț:</strong> <%= v.pret %> €</p>
+            <% if (minPeCategorie[v.categorie] == v.pret) { %>
+              <div class="badge bg-warning text-dark mb-2" style="font-size:1.1em;">
+                ✔ Cel mai ieftin din categoria <strong><%= formatDenumire(v.categorie) %></strong>
+              </div>
+            <% } %>
             <p class="card-text"><strong>Disponibilă din:</strong> <%= formatData(v.data_disponibilitate) %></p>
             <a href="/vacanta/<%= v.id %>" class="btn btn-outline-primary mt-auto">
               <i class="bi bi-arrow-right-circle-fill me-1"></i>Vezi detalii
             </a>
-            <!-- Buton comparare aici -->
             <button class="btn btn-outline-success btn-compare mt-2"
                     data-id="<%= v.id %>"
                     data-nume="<%= v.nume %>"
@@ -243,7 +292,13 @@
       <% }); %>
     </section>
   </main>
-
+<!-- La finalul paginii, înainte de </body> -->
+<div id="modal-vacanta" class="modal-vacanta-overlay" style="display:none;">
+  <div class="modal-vacanta-content">
+    <button class="modal-close">&times;</button>
+    <div id="modal-vacanta-body"></div>
+  </div>
+</div>
   <%- include("../fragmente/footer") %>
   
   
