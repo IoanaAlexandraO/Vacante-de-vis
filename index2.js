@@ -96,14 +96,53 @@ app.get("/seturi", async (req, res) => {
 app.get("/vacante", async (req, res) => {
   try {
     const { rows: vacante } = await client.query("SELECT * FROM vacante ORDER BY data_disponibilitate DESC");
-    // Ia categoria selectată din query sau pune "toate" dacă nu există
     const categorie_selectata = req.query.categorie || "toate";
-    res.render("pagini/vacante", { vacante, categorie_selectata });
+
+    // === Prelucrări pentru cele 8 tipuri de input ===
+    let pretulMinim = 300, pretulMaxim = 1200;
+    let durataMin = null, durataMax = null;
+    let dataMin = null;
+    const dificultatiSet = new Set();
+    const activitatiSet = new Set();
+    const numeSet = new Set();
+    const categoriiSet = new Set();
+
+    for (let vac of vacante) {
+      pret = parseInt(vac.pret);
+      if (pretulMinim === null || pret < pretulMinim) pretulMinim = pret;
+      if (pretulMaxim === null || pret > pretulMaxim) pretulMaxim = pret;
+
+      if (durataMin === null || vac.durata_zile < durataMin) durataMin = vac.durata_zile;
+      if (durataMax === null || vac.durata_zile > durataMax) durataMax = vac.durata_zile;
+
+      const data = new Date(vac.data_disponibilitate);
+      if (!isNaN(data) && (dataMin === null || data < dataMin)) dataMin = data;
+
+      if (vac.dificultate) dificultatiSet.add(vac.dificultate.toLowerCase());
+      if (vac.activitati) vac.activitati.split(",").forEach(a => activitatiSet.add(a.trim()));
+      if (vac.nume) numeSet.add(vac.nume.trim());
+      if (vac.categorie) categoriiSet.add(vac.categorie.trim());
+    }
+
+    res.render("pagini/vacante", {
+      vacante,
+      categorie_selectata,
+      pretulMinim,
+      pretulMaxim,
+      durataMin,
+      durataMax,
+      dataMin: dataMin?.toISOString().split("T")[0],
+      dificultati: Array.from(dificultatiSet),
+      activitati: Array.from(activitatiSet),
+      numeVacante: Array.from(numeSet),
+      categoriiRadio: Array.from(categoriiSet)
+    });
   } catch (err) {
     console.error("Eroare la extragerea vacanțelor:", err);
     res.status(500).render("pagini/eroare", { mesaj: "Nu s-au putut încărca vacanțele." });
   }
 });
+
 
 app.get("/vacanta/:id", async (req, res) => {
   const id = req.params.id;
