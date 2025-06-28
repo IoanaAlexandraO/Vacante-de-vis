@@ -83,7 +83,7 @@ function levenshtein(a, b) {
           
       radioCategorii.forEach(radio => valCategorie = radio.checked ? radio.value.toLowerCase() : valCategorie);
 
-      console.log("Filtrare:", { valActivitati});
+      // console.log("Filtrare:", { valActivitati});
 
       vacante.forEach(card => {
         let ok = true;
@@ -159,11 +159,12 @@ if (btnSortarePretDesc) {
 
     // Reafișează toate coloanele (nu doar cardurile)
     const container = document.getElementById("vacante-container");
+    vacante.forEach(card => card.style.display = "block");
     coloane.forEach(col => col.style.display = "block");
-    coloane.forEach(col => container.appendChild(col));
+    // coloane.forEach(col => container.appendChild(col));
     sortAscendent = true;
     // container.className = "row g-4"; // doar dacă ai modificat-o dinamic
-    container.style.display = "";
+    // container.style.display = "";
   });
 }
 });
