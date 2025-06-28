@@ -19,6 +19,9 @@
   <% imaginiSelectate.forEach(function(img, i) { %>
     <div class="slide <%= i === 0 ? 'active' : '' %>"
          style="background-image: url('/<%= cale_galerie %>/<%= img.cale_relativa %>');">
+      <div class="slide-titlu">
+        <%= img.titlu || img.nume || '' %>
+      </div>
     </div>
   <% }); %>
 </div>

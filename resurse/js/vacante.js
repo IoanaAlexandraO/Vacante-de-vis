@@ -15,8 +15,9 @@ window.addEventListener("DOMContentLoaded", () => {
   const btnFiltrare = document.getElementById("btn-filtrare");
   const btnSortarePret = document.getElementById("btn-sortare-pret");
   const btnResetare = document.getElementById("btn-resetare");
-
+  const btnSortarePretDesc = document.getElementById("btn-sortare-pret-desc");
   const vacante = Array.from(document.querySelectorAll("article.card"));
+  const coloane = Array.from(document.querySelectorAll("#vacante-container > .col-md-6.col-lg-4"));
   let sortAscendent = true;
 
   // Afișare valoare slider preț
@@ -91,9 +92,8 @@ window.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  if (btnSortarePret) {
-    btnSortarePret.addEventListener("click", () => {
-      const container = document.getElementById("vacante-container");
+function ordonareCarduri() {
+        const container = document.getElementById("vacante-container");
       const carduri = Array.from(container.children);
 
       carduri.sort((a, b) => {
@@ -102,30 +102,46 @@ window.addEventListener("DOMContentLoaded", () => {
         return sortAscendent ? pretA - pretB : pretB - pretA;
       });
 
-      sortAscendent = !sortAscendent;
-      btnSortarePret.innerHTML = `<i class="bi bi-arrow-down-up me-1"></i><span class="d-none d-sm-inline">${sortAscendent ? "Sortare după preț ↑" : "Sortare după preț ↓"}</span>`;
+      // btnSortarePret.innerHTML = `<i class="bi bi-arrow-down-up me-1"></i><span class="d-none d-sm-inline">${sortAscendent ? "Sortare după preț ↑" : "Sortare după preț ↓"}</span>`;
       carduri.forEach(card => container.appendChild(card));
-    });
-  }
-
-  if (btnResetare) {
-    btnResetare.addEventListener("click", () => {
-      if (inpNume) inpNume.value = "";
-      if (inpPret) inpPret.value = inpPret.min;
-      if (valPret) valPret.textContent = `(${inpPret?.min})`;
-      if (inpDificultate) inpDificultate.value = "oricare";
-      if (inpCuloare) inpCuloare.value = "oricare";
-      if (inpTransport) inpTransport.checked = false;
-      if (inpDurata) inpDurata.value = inpDurata.max;
-      if (inpData) inpData.value = "";
-      if (inpActivitati) inpActivitati.value = "";
-
-      radioCategorii.forEach(radio => radio.checked = false);
-
-
-      vacante.forEach(card => card.style.display = "block");
-      btnSortarePret.innerHTML = `<i class="bi bi-arrow-down-up me-1"></i><span class="d-none d-sm-inline">Sortare după preț</span>`;
+}
+  if (btnSortarePret) {
+    btnSortarePret.addEventListener("click", () => {
       sortAscendent = true;
+      ordonareCarduri();
     });
   }
+if (btnSortarePretDesc) {
+  btnSortarePretDesc.addEventListener("click", () => {
+      sortAscendent = false;
+     ordonareCarduri();
+    });
+
+   
+}
+  if (btnResetare) {
+  btnResetare.addEventListener("click", () => {
+    if (!confirm("Sigur vrei să resetezi toate filtrele?")) return;
+
+    if (inpNume) inpNume.value = "";
+    if (inpPret) inpPret.value = inpPret.min;
+    if (valPret) valPret.textContent = `(${inpPret?.min})`;
+    if (inpDificultate) inpDificultate.value = "oricare";
+    if (inpCuloare) inpCuloare.value = "oricare";
+    if (inpTransport) inpTransport.checked = false;
+    if (inpDurata) inpDurata.value = inpDurata.max;
+    if (inpData) inpData.value = "";
+    if (inpActivitati) inpActivitati.value = "";
+
+    radioCategorii.forEach(radio => radio.checked = false);
+
+    // Reafișează toate coloanele (nu doar cardurile)
+    const container = document.getElementById("vacante-container");
+    coloane.forEach(col => col.style.display = "block");
+    coloane.forEach(col => container.appendChild(col));
+    sortAscendent = true;
+    // container.className = "row g-4"; // doar dacă ai modificat-o dinamic
+    container.style.display = "";
+  });
+}
 });

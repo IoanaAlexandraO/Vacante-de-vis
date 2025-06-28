@@ -27,8 +27,8 @@
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
 }
 
-
-
+/* pun pozitionare absolute la reflexie-text ca sa fie o pozitie fixa dupa care sa se ia reflexia
+reflexia se ia dupa parinte pt ca e absolute */
 .reflexie-text {
     position: relative;
     display: inline-block;
@@ -42,7 +42,7 @@
     z-index: 1;
     font-family: serif;
     display: inline-flex;
-    align-items: flex-start;
+    align-items: flex-start; /* Align text to the top */
     cursor: pointer; /* Indicate it's clickable */
 }
 /*varianta corecta */
@@ -61,6 +61,7 @@
     z-index: -1;
     filter: blur(0.3px);
     mask-image:
+ 
         linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.5) 70%, transparent 100%),
         repeating-radial-gradient(
             ellipse at 50% 100%,
@@ -69,6 +70,7 @@
             transparent 20px,
             transparent 25px
         );
+        /* chrome.alte browsere */
     -webkit-mask-image:
         linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.5) 70%, transparent 100%),
         repeating-radial-gradient(
@@ -120,7 +122,7 @@
 }
 .scroll-container {
     width: 100%;
-    overflow: hidden;
+    overflow: hidden; /* Ascunde overflow-ul pentru a preveni defilarea orizontală */
     position: relative;
     background-color: #56c7e6;/* Puteți modifica culoarea de fundal */
     color: #3A5BB4; /* Puteți modifica culoarea textului */
@@ -129,9 +131,9 @@
 
 /* Textul cu defilare orizontală */
 .scrolling-text {
-    white-space: nowrap;
+    white-space: nowrap; /* Previne împărțirea pe linii */
     animation: scrollText 15s linear infinite; /* Durata de 15s poate fi modificată */
-    display: inline-block;
+    display: inline-block; /* Asigură că textul este tratat ca un element inline */
     padding-left: 100%; /* Începe din afara containerului (din dreapta) */
 }
 

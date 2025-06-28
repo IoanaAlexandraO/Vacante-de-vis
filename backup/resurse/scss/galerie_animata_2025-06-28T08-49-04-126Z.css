@@ -48,4 +48,7 @@
     border-radius: 0 0 10px 10px;
     pointer-events: none;
   }
+  .galerie-animata .slide {
+    position: relative;
+  }
 }

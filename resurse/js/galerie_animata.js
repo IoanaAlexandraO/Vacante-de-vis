@@ -87,6 +87,7 @@ document.addEventListener("DOMContentLoaded", () => {
         slide.style.clipPath = cclipPath;
         slide.style.filter = cfilter;
         slide.style.opacity = copacity;
+        void slide.offsetWidth;
     }
 
     // Hover handlers

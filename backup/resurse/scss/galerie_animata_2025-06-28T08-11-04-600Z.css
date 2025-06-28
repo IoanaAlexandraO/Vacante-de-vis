@@ -35,17 +35,14 @@
     filter: grayscale(0);
     clip-path: ellipse(100% 70% at 50% 50%);
   }
-  .galerie-animata .slide-titlu {
+  .galerie-animata .titlu-poza {
     position: absolute;
-    bottom: 10px;
-    left: 0;
+    bottom: 0;
     width: 100%;
-    color: #fff;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(255, 255, 255, 0.7);
     text-align: center;
-    font-size: 1.2em;
-    padding: 0.3em 0;
-    border-radius: 0 0 10px 10px;
-    pointer-events: none;
+    font-weight: bold;
+    font-size: 1.2rem;
+    padding: 0.5em;
   }
 }

@@ -276,9 +276,9 @@ console.log("Folderul proiectului: ", __dirname);
 console.log("Calea fisierului index.js: ", __filename);
 console.log("Folderul curent de lucru: ", process.cwd());
 
-// Funcție asincronă pentru compilarea unui fișier SCSS într-un fișier CSS cu backup
+// Funcție asincronă 
 async function compileazaScss(caleScss, caleCss) {
-  // Verificăm dacă calea SCSS e absolută; dacă nu, o completăm cu folderul global pentru SCSS
+  // folderul global pentru SCSS
   const scssAbs = path.isAbsolute(caleScss)
     ? caleScss
     : path.join(obiectGlobal.folderScss, caleScss);
@@ -424,19 +424,19 @@ app.get(['/', '/index', '/home'], function (req, res) {
 
 app.get("/galerie_animata", (req, res) => {
   try {
-    // Citește fișierul JSON la fiecare request
+   
     const caleGalerieJson = path.join(__dirname, "resurse/json/galerie.json");
     const jsonImagini = JSON.parse(fs.readFileSync(caleGalerieJson, "utf8"));
 
     // Puteri ale lui 2 între 2 și 16
     const puteri = [2, 4, 8, 16];
-    const imaginiPar = jsonImagini.imagini.filter((img, idx) => idx % 2 === 0);
+    const imaginiPar = jsonImagini.imagini.filter((img, idx) => idx % 2 === 0);//
 
     // Filtrează puterile posibile în funcție de câte imagini ai
     const puteriPosibile = puteri.filter(p => p <= imaginiPar.length);
-    const nrImagini = puteriPosibile[Math.floor(Math.random() * puteriPosibile.length)];
+    const nrImagini = puteriPosibile[Math.floor(Math.random() * puteriPosibile.length)];// Alege o putere aleatorie
 
-    const imaginiSelectate = imaginiPar.slice(0, nrImagini);
+    const imaginiSelectate = imaginiPar.slice(0, nrImagini);//primele imagini pare
 
     res.render("pagini/galerie_animata", {
       imaginiSelectate,
@@ -450,23 +450,23 @@ app.get("/galerie_animata", (req, res) => {
 
 
 
-// Funcție asincronă pentru inițializarea și procesarea imaginilor
+// Funcție asincronă 
 async function initGallery() {
   // Creează calea absolută către fișierul galerie.json
   const galleryPath = path.join(__dirname, 'resurse/json/galerie.json');
 
-  // Citește conținutul fișierului JSON și îl parsează într-un obiect JavaScript
+  // parseaza in js
   const galleryData = JSON.parse(fs.readFileSync(galleryPath, 'utf8'));
 
-  // Verifică dacă structura JSON este validă (conține câmpurile așteptate)
+ 
   if (!galleryData?.cale_galerie || !Array.isArray(galleryData?.imagini)) {
-    throw new Error("Invalid gallery JSON structure"); // Aruncă eroare dacă structura e greșită
+    throw new Error("Invalid gallery JSON structure"); 
   }
 
-  // Creează calea absolută către folderul principal al galeriei
+  // folderul principal al galeriei
   const galerieFolder = path.join(__dirname, galleryData.cale_galerie);
 
-  // Creează calea absolută către subfolderul "mic" (unde se vor salva imaginile redimensionate)
+  // Creează calea absolută
   const smallFolder = path.join(galerieFolder, "mic");
 
   // Verifică dacă folderul "mic" există, dacă nu, îl creează recursiv
@@ -477,24 +477,23 @@ async function initGallery() {
     console.log("Small folder already exists:", smallFolder);
   }
 
-  // Simulează o dată și oră curentă pentru testare (12 mai 2025, ora 08:10)
-  const currentDate = new Date("2025-05-12T08:10:00");
+  const currentDate = new Date("2025-05-12T08:40:00");
   console.log("Simulated current date:", currentDate);
 
-  // Obține minutul din ora simulată
+  
   const currentMinutes = currentDate.getMinutes();
   console.log("Current minutes:", currentMinutes);
 
-  // Determină în care sfert de oră se află ora curentă
+ 
   let currentQuarter;
   if (currentMinutes < 15) {
-    currentQuarter = "1"; // între minutul 0 și 14
+    currentQuarter = "1"; 
   } else if (currentMinutes < 30) {
-    currentQuarter = "2"; // între minutul 15 și 29
+    currentQuarter = "2"; 
   } else if (currentMinutes < 45) {
-    currentQuarter = "3"; // între minutul 30 și 44
+    currentQuarter = "3"; 
   } else {
-    currentQuarter = "4"; // între minutul 45 și 59
+    currentQuarter = "4"; 
   }
   console.log("Determined current quarter:", currentQuarter);
 
@@ -506,7 +505,7 @@ async function initGallery() {
     // Verifică dacă imaginea are o cale relativă validă
     if (!image?.cale_relativa) {
       console.warn("Skipping image - missing cale_relativa:", image);
-      return; // Sare peste imagine dacă nu are cale validă
+      return; 
     }
 
     // Extrage numele fișierului și extensia prin separare la "."
@@ -524,12 +523,12 @@ async function initGallery() {
       return; // Dacă nu există, nu o procesează
     }
 
-    // Încearcă procesarea imaginii (cu try/catch pentru protecție)
+    // procesarea imaginii
     try {
       // Folosește biblioteca `sharp` pentru a redimensiona și converti imaginea
       await sharp(sourcePath)               // Deschide imaginea sursă
-        .resize({ width: 300 })             // Redimensionează la lățime 300px
-        .webp()                             // Convertește în format .webp
+        .resize({ width: 300 })             
+        .webp()                             
         .toFile(targetPath);                // Salvează imaginea procesată la calea target
 
       console.log("Processed image:", image.cale_relativa);
@@ -541,7 +540,7 @@ async function initGallery() {
       });
 
     } catch (err) {
-      // Afișează eroarea dacă procesarea imaginii eșuează
+      
       console.error(`Error processing image ${image.cale_relativa}:`, err);
     }
   });
