@@ -1,0 +1,16 @@
+{
+  "oferte": [
+    {
+      "categorie": "relaxare",
+      "reducere": 30,
+      "ora-incepere": "10:00",
+      "ora-finalizare": "12:00"
+    },
+    {
+      "categorie": "aventura",
+      "reducere": 20,
+      "ora-incepere": "08:00",
+      "ora-finalizare": "09:30"
+    }
+  ]
+}
