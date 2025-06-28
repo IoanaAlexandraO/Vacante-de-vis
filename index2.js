@@ -90,6 +90,44 @@ app.get("/seturi", async (req, res) => {
   }
 });
 
+app.get("/comparare", async (req, res) => {
+    const id1 = req.query.id1;
+    const id2 = req.query.id2;
+
+    if (!id1 || !id2) {
+        return res.status(400).send("Lipsesc ID-urile vacanțelor");
+    }
+
+    try {
+        const result = await client.query(
+            `SELECT * FROM vacante WHERE id IN ($1, $2) ORDER BY id`,
+            [id1, id2]
+        );
+
+        if (result.rows.length !== 2) {
+            return res.status(404).send("Una sau ambele vacanțe nu au fost găsite.");
+        }
+
+        const vacanta1 = result.rows[0];
+        const vacanta2 = result.rows[1];
+
+        // Transformare activități în listă
+        if (typeof vacanta1.activitati === "string")
+            vacanta1.activitati = vacanta1.activitati.split(",").map(s => s.trim());
+
+        if (typeof vacanta2.activitati === "string")
+            vacanta2.activitati = vacanta2.activitati.split(",").map(s => s.trim());
+
+        res.render("pagini/comparare", {
+            vacanta1,
+            vacanta2
+        });
+
+    } catch (err) {
+        console.error("Eroare la comparare:", err);
+        res.status(500).send("Eroare internă");
+    }
+});
 
 
 
